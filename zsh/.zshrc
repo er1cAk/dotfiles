@@ -184,3 +184,19 @@ export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
 alias claude-work="CLAUDE_CONFIG_DIR=~/.claude-work /opt/homebrew/bin/claude"
 export PATH="/opt/homebrew/opt/icu4c@78/sbin:$PATH"
 export PATH="/opt/homebrew/opt/icu4c@78/bin:$PATH"
+
+# nv -- open nvim with the project's DB credentials injected as env vars.
+#
+# vim-dadbod-ui reads any DB_UI_* environment variable as a connection (the name
+# is whatever follows the prefix, lowercased), so nothing has to be stored on
+# disk. Store DB_UI_DEV, DB_UI_STAGING, ... in Infisical or a gitignored .env and
+# they show up under <leader>D.
+nv() {
+  if [ -f .infisical.json ]; then
+    infisical run --silent -- nvim "$@"
+  elif [ -f .env ]; then
+    ( set -a; . ./.env; set +a; nvim "$@" )
+  else
+    nvim "$@"
+  fi
+}

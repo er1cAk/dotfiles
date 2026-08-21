@@ -255,6 +255,28 @@ under the cursor. Add a connection with `:DBUIAddConnection`, e.g.
 `postgres://user@localhost/dbname` or `sqlite:./dev.db`. Inside `.sql` buffers you get
 table and column completion. `psql`, `sqlite3` and `mysql` are already installed.
 
+**Storing DB connections.** vim-dadbod-ui reads any `DB_UI_*` environment variable as a
+connection — the name is whatever follows the prefix, lowercased. So
+`DB_UI_DEV=postgres://…` becomes a connection called `dev`. Three ways to supply them,
+in order of preference:
+
+| Where | How | Secrets on disk? |
+|---|---|---|
+| **Infisical** | `nv` in a repo with `.infisical.json` runs `infisical run -- nvim` | none |
+| **`.env`** | `nv` sources a gitignored `.env` before launching | local only, never committed |
+| **`:DBUIAddConnection`** | prompts for a URL, saves to `~/.local/share/nvim/db_ui/connections.json` | **plaintext** — local scratch DBs only |
+
+The `nv` shell function picks the right one automatically: Infisical if the project is
+wired to it, otherwise `.env`, otherwise plain `nvim`. Put the connection strings in
+Infisical as `DB_UI_DEV`, `DB_UI_STAGING`, … and they appear under `<leader>D` with no
+credentials written anywhere.
+
+Never put a production URL in `:DBUIAddConnection` — that file is unencrypted.
+
+**Working in the DB UI.** `<leader>D` opens the drawer. `o` or `<CR>` expands a database
+→ schema → table. `<leader>W` saves a query for reuse; `<leader>S` runs the query under
+the cursor. Inside `.sql` buffers you get table and column completion.
+
 **Python venvs.** The project's `.venv` (the one `uv` creates) is **activated
 automatically** when you open a Python file, so basedpyright resolves third-party imports
 without being asked. `<leader>cv` overrides it manually.
