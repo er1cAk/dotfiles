@@ -103,6 +103,32 @@ local okd, cfg = pcall(require, 'nvconfig')
 local n = (okd and cfg.nvdash and cfg.nvdash.buttons) and #cfg.nvdash.buttons or 0
 out[#out+1] = (n > 0 and 'PASS ' or 'FAIL ') .. 'nvdash defines ' .. n .. ' buttons'
 
+-- Every server enabled in lspconfig.lua must have its binary installed.
+-- This is THE check that was missing: angularls sat enabled-but-absent while
+-- 7 Angular repos got no LSP at all, and the executable guard hid it silently.
+--
+-- Scope the match to the `local servers = { ... }` table -- matching the whole
+-- file also picks up setting keys like typeCheckingMode = "standard".
+local cfg_src = io.open(vim.fn.stdpath('config') .. '/lua/configs/lspconfig.lua'):read('a')
+local servers_tbl = cfg_src:match('local servers = %{(.-)\n%}')
+local mason_bin = vim.fn.stdpath('data') .. '/mason/bin'
+local missing, enabled = {}, 0
+
+if not servers_tbl then
+  out[#out+1] = 'FAIL could not locate the servers table in lspconfig.lua'
+else
+  for server, bin in servers_tbl:gmatch('([%w_]+) = "([%w%-_.]+)"') do
+    enabled = enabled + 1
+    if vim.fn.executable(bin) ~= 1 and vim.fn.executable(mason_bin .. '/' .. bin) ~= 1 then
+      missing[#missing+1] = server .. ' (' .. bin .. ')'
+    end
+  end
+  out[#out+1] = (enabled > 0 and 'PASS ' or 'FAIL ') .. enabled .. ' LSP servers declared'
+  out[#out+1] = (#missing == 0 and 'PASS ' or 'FAIL ')
+    .. 'every enabled LSP has its binary installed'
+    .. (#missing > 0 and (' -- MISSING: ' .. table.concat(missing, ', ')) or '')
+end
+
 -- debugging must exist for every language whose mappings we advertise
 vim.cmd('silent! Lazy! load nvim-dap'); vim.cmd('silent! Lazy! load mason-nvim-dap.nvim')
 vim.wait(2000)

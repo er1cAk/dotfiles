@@ -246,6 +246,15 @@ map("n", "<leader>ac", "<cmd>CopilotChatCommit<cr>", { desc = "copilot commit me
 map("n", "<leader>ap", "<cmd>Copilot panel<cr>", { desc = "copilot panel" })
 map("n", "<leader>as", "<cmd>Copilot status<cr>", { desc = "copilot status" })
 
+-- ── stack tooling ─────────────────────────────────────────────────────────
+-- <leader>D was NvChad's LSP type-definition, which is reachable three other
+-- ways (gy, grt, and the built-in). Freed for the DB UI, its usual binding.
+del("n", "<leader>D")
+map("n", "<leader>D", "<cmd>DBUIToggle<cr>", { desc = "database UI toggle" })
+map("n", "<leader>cv", "<cmd>VenvSelect<cr>", { desc = "code select python venv" })
+map("n", "<leader>um", "<cmd>RenderMarkdown toggle<cr>", { desc = "toggle markdown rendering" })
+map("n", "<leader>mp", "<cmd>MarkdownPreviewToggle<cr>", { desc = "markdown preview in browser" })
+
 -- ── plugin manager / tooling ──────────────────────────────────────────────
 map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "lazy plugin manager" })
 map("n", "<leader>lm", "<cmd>Mason<cr>", { desc = "mason tool manager" })
@@ -300,7 +309,3 @@ vim.api.nvim_create_user_command("FormatEnable", function()
   vim.b.disable_autoformat = false
   vim.g.disable_autoformat = false
 end, { desc = "Re-enable format on save" })
-
-vim.api.nvim_create_user_command("MasonExtras", function()
-  vim.cmd "MasonInstall jdtls kotlin-language-server intelephense ansible-language-server helm-ls cmake-language-server astro-language-server angular-language-server sql-language-server"
-end, { desc = "Install the less-common language servers (java, kotlin, php, ansible, helm, cmake, astro, angular, sql)" })

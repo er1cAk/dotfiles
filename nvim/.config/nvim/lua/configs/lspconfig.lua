@@ -20,7 +20,6 @@ local servers = {
   jsonls = "vscode-json-language-server",
   emmet_language_server = "emmet-language-server",
   tailwindcss = "tailwindcss-language-server",
-  astro = "astro-ls",
   angularls = "ngserver",
 
   -- go
@@ -41,16 +40,8 @@ local servers = {
   docker_compose_language_service = "docker-compose-langserver",
   terraformls = "terraform-ls",
   helm_ls = "helm_ls",
-  ansiblels = "ansible-language-server",
 
-  -- db / misc
-  prismals = "prisma-language-server",
-  sqlls = "sql-language-server",
-  cmake = "cmake-language-server",
-
-  -- jvm / php (installed on demand -- see :MasonExtras)
-  jdtls = "jdtls",
-  kotlin_language_server = "kotlin-language-server",
+  -- php: CloudTalk-era legacy API still has real source here
   intelephense = "intelephense",
 }
 

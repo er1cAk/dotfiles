@@ -1,5 +1,5 @@
 return {
-  -- ── debugging (you had the LazyVim dap.core + dap.nlua extras) ──────────
+  -- ── debugging: go (delve), python (debugpy), js/ts (js-debug) ──────────
   {
     "mfussenegger/nvim-dap",
     cmd = { "DapContinue", "DapToggleBreakpoint", "DapStepOver", "DapStepInto", "DapStepOut" },
@@ -37,10 +37,6 @@ return {
           automatic_installation = false,
           handlers = {}, -- empty = use the default handler for every source
         },
-      },
-      {
-        "jbyuki/one-small-step-for-vimkind",
-        ft = "lua",
       },
     },
     config = function()
@@ -94,18 +90,6 @@ return {
             },
           }
         end
-      end
-
-      -- lua (one-small-step-for-vimkind)
-      dap.configurations.lua = {
-        {
-          type = "nlua",
-          request = "attach",
-          name = "Attach to running Neovim instance",
-        },
-      }
-      dap.adapters.nlua = function(callback, config)
-        callback { type = "server", host = config.host or "127.0.0.1", port = config.port or 8086 }
       end
     end,
   },

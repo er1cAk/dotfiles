@@ -35,6 +35,9 @@ return {
         "json-lsp",
         "emmet-language-server",
         "tailwindcss-language-server",
+        "angular-language-server",   -- 7 repos depend on @angular/core
+        "intelephense",              -- ~167 non-vendor .php in the legacy API
+        "helm-ls",                   -- 180 Chart.yaml
         "gopls",
         "basedpyright",
         { "ruff", version = "0.16.3" },
@@ -45,7 +48,6 @@ return {
         "dockerfile-language-server",
         "docker-compose-language-service",
         "terraform-ls",
-        "prisma-language-server",
 
         -- Formatters are PINNED: they rewrite file contents, so a version
         -- difference between machines shows up as spurious diffs in PRs.
@@ -76,15 +78,15 @@ return {
       ensure_installed = {
         "lua", "luadoc", "vim", "vimdoc", "query",
         "bash", "c", "diff", "regex", "printf",
-        "html", "css", "scss", "javascript", "typescript", "tsx", "vue", "svelte",
+        "html", "css", "scss", "javascript", "typescript", "tsx",
         "json", "yaml", "toml", "xml",
         "markdown", "markdown_inline",
         "go", "gomod", "gosum", "gowork",
         "python",
-        "java", "kotlin", "php",
+        "php",
         "dockerfile", "terraform", "hcl",
-        "sql", "prisma", "graphql",
-        "cmake", "make", "ninja",
+        "sql", "graphql",
+        "make",
         "git_config", "gitcommit", "gitignore", "git_rebase",
       },
     },

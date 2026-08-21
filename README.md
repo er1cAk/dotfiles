@@ -16,6 +16,25 @@ Then two manual steps `install.sh` prints and cannot do for you:
 - `:Copilot auth` in Neovim — credentials are machine-local by design.
 - Create `~/.gitconfig-work` if this machine does work repos (see *Git identity*).
 
+## The stack this targets
+
+Tooling is chosen for this and nothing else — anything without evidence of use in my
+repos gets removed rather than carried:
+
+| | |
+|---|---|
+| Go | gopls, delve, neotest-go. `gofmt` + `goimports` (**not** gofumpt) |
+| Python | uv, basedpyright + ruff, debugpy. Project `.venv` auto-activates |
+| TS/JS | node/pnpm/nvm, ts_ls, eslint, prettierd, js-debug |
+| Frontend | Angular, React, React Native, Next.js — angularls, tailwind, emmet |
+| Data | Postgres + SQLite via vim-dadbod; Drizzle (not Prisma) |
+| Infra | terraform, helm, docker |
+| PHP | intelephense, for one legacy service |
+| Markdown | in-buffer rendering; images and mermaid via browser preview |
+
+Inngest and Infisical need no editor tooling — the first is a TypeScript SDK already
+covered by `ts_ls`, the second is a CLI.
+
 ## Requirements
 
 - **macOS** with Homebrew and Xcode Command Line Tools (`xcode-select --install`).

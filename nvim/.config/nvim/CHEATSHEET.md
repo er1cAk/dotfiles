@@ -237,29 +237,58 @@ These four mappings are replacements for nvdash's own, which crash with
 now that the mouse is enabled. See the `nvdash_fix` block in `lua/autocmds.lua`. If a
 future NvChad release fixes this upstream, that block can simply be deleted.
 
+### Stack tooling
+
+| Key | Action |
+|---|---|
+| `<leader>D` | Database UI (Postgres / SQLite / MySQL) |
+| `<leader>cv` | Pick a Python venv |
+| `<leader>um` | Toggle markdown rendering in the buffer |
+| `<leader>mp` | Markdown preview in the browser |
+
+**Database.** `:DBUI` browses schemas and runs queries; `<leader>S` executes the query
+under the cursor. Add a connection with `:DBUIAddConnection`, e.g.
+`postgres://user@localhost/dbname` or `sqlite:./dev.db`. Inside `.sql` buffers you get
+table and column completion. `psql`, `sqlite3` and `mysql` are already installed.
+
+**Python venvs.** The project's `.venv` (the one `uv` creates) is **activated
+automatically** when you open a Python file, so basedpyright resolves third-party imports
+without being asked. `<leader>cv` overrides it manually.
+
+**Markdown.** The buffer renders headings, tables, checkboxes and callouts in place.
+**Images and mermaid diagrams need `<leader>mp`** — Alacritty cannot draw inline images
+(it implements neither sixel nor the kitty graphics protocol), so those render in the
+browser instead.
+
+**package.json.** Open one and dependency versions appear inline. Keys are buffer-local
+so they don't collide with `<leader>n` (line-number toggle): `<leader>ns` show,
+`<leader>nh` hide, `<leader>nu` update, `<leader>nd` delete, `<leader>ni` install,
+`<leader>nc` change version.
+
 ### Housekeeping
 
 | Command | Purpose |
 |---|---|
 | `<leader>l` | Lazy (plugin manager) |
 | `<leader>lm` | Mason (LSP/tool installer) |
-| `:MasonExtras` | Install the rarer servers: java, kotlin, php, ansible, helm, cmake, astro, angular, sql |
 | `:checkhealth` | Diagnose problems |
 
 ---
 
 ## What's installed
 
-**Language servers:** lua, typescript/javascript, eslint, html, css, json, emmet,
-tailwind, gopls, basedpyright, ruff, yaml, taplo (toml), marksman (markdown), bash,
-dockerfile, docker-compose, terraform, prisma.
+**Language servers (21, all verified installed by `check.sh`):** lua, typescript/
+javascript, eslint, **angular**, html, css, json, emmet, tailwind, gopls, basedpyright,
+ruff, **intelephense** (php), yaml, taplo (toml), marksman (markdown), bash, dockerfile,
+docker-compose, terraform, **helm**.
 
-**Formatters:** stylua, prettierd, gofumpt, goimports, shfmt, sql-formatter, ruff.
+**Formatters:** stylua, prettierd, gofmt, goimports, shfmt, sql-formatter, ruff.
 
 **Debug adapters:** delve (Go), js-debug-adapter (node/browser).
 
-Haskell (`hls`) was in your old LazyVim extras but is deliberately left out — it needs a
-full ghcup toolchain. Install with `:MasonInstall haskell-language-server` if you want it.
+**Removed as dead weight** (verified zero usage in `~/work`): prisma (you use Drizzle —
+0 `schema.prisma` files), astro, cmake, java, kotlin, vue, svelte, ansible, and the SQL
+language server (dadbod does it better). Haskell was never installed.
 
 **Also changed on your machine:**
 
