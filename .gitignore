@@ -1,0 +1,15 @@
+.DS_Store
+*.swp
+
+# Machine-local git identity (holds a work email address)
+.gitconfig-work
+
+# Neovim state that must never be committed:
+#   ~/.local/share/nvim is ~1.9 GB and fully regenerable from lazy-lock.json,
+#   Mason and tree-sitter. Listed here defensively in case anyone ever adds it.
+nvim/.local/
+nvim/.config/nvim/lazy/
+nvim/.config/nvim/plugin/
+
+# Copilot credentials live in ~/.config/github-copilot -- never track them.
+github-copilot/

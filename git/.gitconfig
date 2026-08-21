@@ -1,0 +1,52 @@
+[user]
+	name = Erik Dvorčák
+	email = erik.dvorcak@gmail.com
+	signingKey = 910555CC079B0A4CDAD9BF54E42324D2686299B0
+[core]
+	autocrlf = input
+	pager = diff-so-fancy | less --tabs=4 -RFX
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /private/var/folders/0c/yz17w_154nq4spsvy6qqf_d80000gn/T/AppTranslocation/4A4400AC-340B-4532-832B-EFE3755541AD/d/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[pull]
+	rebase = false
+[gpg]
+	program = /usr/local/MacGPG2/bin/gpg2
+[commit]
+	gpgsign = true
+[tag]
+	forceSignAnnotated = true
+	gpgSign = true
+[rebase]
+	autoSquash = true
+[interactive]
+	diffFilter = diff-so-fancy --patch
+[color]
+	ui = true
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[color "diff"]
+	meta = 11
+	frag = magenta bold
+	func = 146 bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+
+# Per-machine / per-context identity. Work repos under ~/work use a separate
+# identity file that is NOT tracked in this repo (it holds a work address).
+# git silently ignores this block if the file does not exist.
+[includeIf "gitdir:~/work/"]
+	path = ~/.gitconfig-work
