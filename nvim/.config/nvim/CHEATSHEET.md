@@ -10,7 +10,7 @@ Everything below is what *your* config binds. `<leader>` is **Space**.
 
 | Key | Action |
 |---|---|
-| `Cmd-N` | New Alacritty window |
+| `Cmd-N` | New Alacritty window — gets its **own** tmux session (`main-2`, …) |
 | `Cmd-Return` | Toggle fullscreen |
 | `Cmd-+` / `Cmd--` / `Cmd-0` | Font size up / down / reset |
 | `Cmd-K` | Clear scrollback |
@@ -53,7 +53,7 @@ reopen it; your shells, running processes and scrollback are still there.
 | `Cmd-T` | New window (tab) |
 | `Cmd-D` | Split right |
 | `Cmd-Shift-D` | Split down |
-| `Cmd-W` | Close pane |
+| `Cmd-W` | Close pane — **prompts first** |
 | `Cmd-1..5` | Jump to window 1–5 |
 | `Cmd-Shift-[` / `]` | Previous / next window |
 | `Alt-←` / `Alt-→` | Previous / next window |
@@ -125,8 +125,9 @@ NvChad's cheatsheet.
 
 | Key | Action |
 |---|---|
-| `gd` `gD` `gr` `gI` `gy` | Definition, declaration, references, implementation, type def |
-| `K` / `gK` | Hover docs / signature help |
+| `gd` `gD` `gI` `gy` | Definition, declaration, implementation, type definition |
+| `grr` `gri` `grt` `grn` `gra` | References, implementation, type def, rename, code action — **Neovim built-ins** |
+| `K` / `gK` | Hover docs / signature help (built-in `K` also falls back to `:help`) |
 | `<leader>ca` | Code action |
 | `<leader>cr` | Rename (NvChad's renamer popup) |
 | `<leader>cf` / `<leader>fm` | Format buffer |
@@ -135,6 +136,10 @@ NvChad's cheatsheet.
 | `]d` `[d` / `]e` `[e` | Next/prev diagnostic / error |
 | `<leader>xx` `<leader>xX` | Trouble: buffer / workspace diagnostics |
 | `<leader>xL` `<leader>xQ` `<leader>xt` | Loclist / quickfix / todos |
+
+**Go formats with `gofmt`, not `gofumpt`** — CloudTalk's `.golangci.yml` enables
+`gofmt` + `goimports`, and gofumpt is stricter, so it would quietly reformat beyond
+what those repos expect and add noise to PRs.
 
 **Format on save is on** (conform.nvim). Toggle it with `<leader>uf`, or
 `:FormatDisable` / `:FormatDisable!` (buffer only) / `:FormatEnable`.
@@ -176,7 +181,12 @@ If Copilot isn't authenticated: `:Copilot auth`.
 | `<leader>du` `<leader>dr` `<leader>dt` | Toggle UI / REPL / terminate |
 | `<leader>dg` | Debug Go test |
 
-Adapters wired up: jest, vitest, go, python.
+**Test** adapters: jest, vitest, go, python.
+
+**Debug** adapters: Go (delve), Python (debugpy), JS/TS/TSX (js-debug / `pwa-node`).
+Each has launch and attach configurations. `mason-nvim-dap` wires Go and Python; the
+JS adapter is registered by hand in `lua/plugins/dap.lua` because mason-nvim-dap ships
+no `js` adapter definition.
 
 ### UI toggles & sessions
 
@@ -200,6 +210,8 @@ Adapters wired up: jest, vitest, go, python.
 | `<` `>` in visual | Indent and keep the selection |
 | `<leader>/` | Toggle comment (`gcc` / `gc` also work) |
 | `gsa` `gsd` `gsr` | Surround add / delete / replace |
+| `<C-s>` (insert) | Signature help (Neovim built-in) |
+| `;` / `,` | Repeat / reverse last `f`/`t` motion (Vim default, restored) |
 | `<C-/>` or `<A-i>` | Floating terminal |
 | `<A-h>` / `<A-v>` | Horizontal / vertical terminal |
 
@@ -279,15 +291,31 @@ new tmux window. Lazy-loading nvm would win most of it back if it starts to both
   lua/plugins/*.lua                  plugin specs
 ```
 
+## Dotfiles
+
+This config lives in `~/dotfiles` and is symlinked here by GNU Stow, so **editing these
+files edits the repo** — no apply step, just commit.
+
+```sh
+cd ~/dotfiles && ./check.sh     # 33 assertions
+git add -A && git commit        # your edits are already staged-able
+```
+
+Restoring on another Mac: `git clone … ~/dotfiles && cd ~/dotfiles && ./install.sh`.
+See `~/dotfiles/README.md` for requirements and what is deliberately not tracked.
+
 ## Rolling back
 
 Your LazyVim setup was moved aside, not deleted:
 
 ```
-~/.config/nvim.lazyvim.bak-<timestamp>
-~/.local/share/nvim.bak-<timestamp>
-~/.local/state/nvim.bak-<timestamp>
+~/.config/nvim.lazyvim.bak-20260820-222701      (80K, kept)
 ~/.config/alacritty/alacritty.toml.bak
 ```
 
-To go back: `rm -rf ~/.config/nvim ~/.local/share/nvim && mv` the backups into place.
+The 80K config backup contains `lazy-lock.json` pinning all 79 LazyVim plugins, so the
+whole setup restores from it alone. The 3.5 GB of plugin/Mason data and 206 MB of state
+that sat alongside it were regenerable and have been deleted; the 3,039 undo files were
+rescued into `~/.local/state/nvim/undo` first, so undo history survived.
+
+To go back: move the config backup to `~/.config/nvim` and run `:Lazy restore`.
