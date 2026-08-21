@@ -1,0 +1,751 @@
+<title>Mocha Keymap</title>
+<style>
+  /* ── Catppuccin Latte (light) ─────────────────────────────────────────── */
+  :root {
+    --base:      #eff1f5;
+    --mantle:    #e6e9ef;
+    --crust:     #dce0e8;
+    --surface:   #ccd0da;
+    --surface2:  #bcc0cc;
+    --text:      #4c4f69;
+    --subtext:   #6c6f85;
+    --muted:     #8c8fa1;
+    --blue:      #1e66f5;
+    --mauve:     #8839ef;
+    --green:     #40a02b;
+    --peach:     #fe640b;
+    --red:       #d20f39;
+    --yellow:    #df8e1d;
+    --keycap-bg: #ffffff;
+    --keycap-sh: rgba(76, 79, 105, .22);
+    --shadow:    0 1px 2px rgba(76,79,105,.06), 0 8px 24px rgba(76,79,105,.06);
+
+    --mono: "JetBrainsMono Nerd Font", "JetBrains Mono", ui-monospace,
+            SFMono-Regular, "SF Mono", Menlo, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+
+    --r: 10px;
+  }
+
+  /* dark for the un-stamped (system) state, unless light is explicitly chosen */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --base:      #1e1e2e;
+      --mantle:    #181825;
+      --crust:     #11111b;
+      --surface:   #313244;
+      --surface2:  #45475a;
+      --text:      #cdd6f4;
+      --subtext:   #a6adc8;
+      --muted:     #7f849c;
+      --blue:      #89b4fa;
+      --mauve:     #cba6f7;
+      --green:     #a6e3a1;
+      --peach:     #fab387;
+      --red:       #f38ba8;
+      --yellow:    #f9e2af;
+      --keycap-bg: #313244;
+      --keycap-sh: rgba(0, 0, 0, .5);
+      --shadow:    0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+    }
+  }
+  /* explicit dark choice wins over a light OS */
+  :root[data-theme="dark"] {
+    --base:      #1e1e2e;
+    --mantle:    #181825;
+    --crust:     #11111b;
+    --surface:   #313244;
+    --surface2:  #45475a;
+    --text:      #cdd6f4;
+    --subtext:   #a6adc8;
+    --muted:     #7f849c;
+    --blue:      #89b4fa;
+    --mauve:     #cba6f7;
+    --green:     #a6e3a1;
+    --peach:     #fab387;
+    --red:       #f38ba8;
+    --yellow:    #f9e2af;
+    --keycap-bg: #313244;
+    --keycap-sh: rgba(0, 0, 0, .5);
+    --shadow:    0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--base);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px 96px; }
+
+  /* ── masthead ───────────────────────────────────────────────────────── */
+  header { padding: 56px 0 28px; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 14px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .eyebrow .dot { color: var(--surface2); }
+
+  h1 {
+    font-family: var(--mono);
+    font-size: clamp(30px, 5.2vw, 46px);
+    font-weight: 700;
+    letter-spacing: -.02em;
+    margin: 0 0 12px;
+    text-wrap: balance;
+  }
+  h1 .accent { color: var(--peach); }
+
+  .lede {
+    margin: 0;
+    max-width: 62ch;
+    color: var(--subtext);
+    font-size: 16px;
+  }
+
+  /* ── search ─────────────────────────────────────────────────────────── */
+  .searchbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--base) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--surface);
+    padding: 14px 0;
+    margin-bottom: 30px;
+  }
+  .searchbar-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .field {
+    position: relative;
+    flex: 1 1 320px;
+    display: flex;
+    align-items: center;
+  }
+  .field svg { position: absolute; left: 12px; width: 15px; height: 15px; color: var(--muted); }
+  #q {
+    width: 100%;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text);
+    background: var(--mantle);
+    border: 1px solid var(--surface);
+    border-radius: var(--r);
+    padding: 10px 12px 10px 34px;
+    outline: none;
+  }
+  #q::placeholder { color: var(--muted); }
+  #q:focus { border-color: var(--blue); box-shadow: 0 0 0 3px color-mix(in srgb, var(--blue) 18%, transparent); }
+
+  .count {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: .04em;
+    padding: 5px 11px;
+    border-radius: 999px;
+    border: 1px solid var(--surface);
+    background: transparent;
+    color: var(--subtext);
+    cursor: pointer;
+    transition: background .12s, color .12s, border-color .12s;
+  }
+  .chip:hover { border-color: var(--surface2); color: var(--text); }
+  .chip[aria-pressed="true"] { background: var(--text); color: var(--base); border-color: var(--text); }
+  .chip:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+  /* ── quickstart ─────────────────────────────────────────────────────── */
+  .quickstart {
+    background: var(--mantle);
+    border: 1px solid var(--surface);
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin-bottom: 38px;
+    box-shadow: var(--shadow);
+  }
+  .quickstart h2 {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--peach);
+    margin: 0 0 4px;
+  }
+  .quickstart p { margin: 0 0 18px; color: var(--subtext); font-size: 14px; max-width: 60ch; }
+  .qgrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 10px 22px;
+  }
+  .qrow { display: flex; gap: 10px; align-items: baseline; font-size: 13.5px; }
+  .qrow .lbl { color: var(--subtext); }
+
+  /* ── groups ─────────────────────────────────────────────────────────── */
+  .section-title {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 44px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--surface);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+
+  .card {
+    background: var(--mantle);
+    border: 1px solid var(--surface);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--surface);
+    background: color-mix(in srgb, var(--tool, var(--blue)) 9%, transparent);
+  }
+  .card-head .badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 7px;
+    border-radius: 6px;
+    background: var(--tool, var(--blue));
+    color: var(--base);
+    letter-spacing: .02em;
+  }
+  .card-head h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 620;
+    letter-spacing: -.005em;
+  }
+  .card-head .note {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+  tr { border-top: 1px solid color-mix(in srgb, var(--surface) 55%, transparent); }
+  tr:first-child { border-top: none; }
+  tr:hover { background: color-mix(in srgb, var(--tool, var(--blue)) 6%, transparent); }
+  td { padding: 7px 16px; vertical-align: baseline; }
+  td.k { width: 44%; white-space: nowrap; }
+  td.d { color: var(--subtext); font-size: 13.5px; }
+
+  /* keycaps — physical, since this documents a keyboard */
+  kbd {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--text);
+    background: var(--keycap-bg);
+    border: 1px solid var(--surface2);
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    padding: 2px 6px;
+    box-shadow: 0 1px 0 var(--keycap-sh);
+    white-space: nowrap;
+  }
+  kbd.lead { color: var(--mauve); }
+  .then { color: var(--muted); font-size: 11px; padding: 0 3px; font-family: var(--mono); }
+
+  /* ── gotchas ────────────────────────────────────────────────────────── */
+  .gotchas { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+  .gotcha {
+    border: 1px solid var(--surface);
+    border-left: 3px solid var(--tool, var(--yellow));
+    border-radius: 0 12px 12px 0;
+    background: var(--mantle);
+    padding: 16px 18px;
+  }
+  .gotcha h4 {
+    margin: 0 0 6px;
+    font-size: 13.5px;
+    font-weight: 640;
+    font-family: var(--mono);
+    color: var(--tool, var(--yellow));
+  }
+  .gotcha p { margin: 0; font-size: 13.5px; color: var(--subtext); }
+  .gotcha code, .inline {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--text);
+  }
+
+  .empty {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+  .hidden { display: none !important; }
+
+  footer {
+    margin-top: 56px;
+    padding-top: 22px;
+    border-top: 1px solid var(--surface);
+    color: var(--muted);
+    font-size: 12.5px;
+    font-family: var(--mono);
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+  @media (max-width: 620px) {
+    header { padding-top: 34px; }
+    td.k { width: 50%; }
+    .wrap { padding: 0 16px 64px; }
+    .searchbar-inner { padding: 0 16px; }
+  }
+</style>
+
+<div class="searchbar">
+  <div class="searchbar-inner">
+    <label class="field">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path>
+      </svg>
+      <input id="q" type="search" placeholder="Search keys or actions…  (press / to focus)" autocomplete="off" spellcheck="false">
+    </label>
+    <div class="filters" role="group" aria-label="Filter by tool">
+      <button class="chip" data-tool="all" aria-pressed="true">All</button>
+      <button class="chip" data-tool="nvim" aria-pressed="false">Neovim</button>
+      <button class="chip" data-tool="tmux" aria-pressed="false">tmux</button>
+      <button class="chip" data-tool="alacritty" aria-pressed="false">Alacritty</button>
+    </div>
+    <span class="count" id="count"></span>
+  </div>
+</div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">
+      <span>Alacritty</span><span class="dot">·</span><span>tmux</span><span class="dot">·</span><span>NvChad</span>
+      <span class="dot">·</span><span>Catppuccin Mocha</span>
+    </p>
+    <h1>Mocha <span class="accent">Keymap</span></h1>
+    <p class="lede">
+      Every binding below was read out of the running config, not written from memory —
+      so this matches what the keyboard actually does. <kbd class="lead">Space</kbd> is the leader;
+      hold it and wait to get the same menu in Neovim.
+    </p>
+  </header>
+
+  <section class="quickstart">
+    <h2>The first week</h2>
+    <p>Twelve keys carry most of the day. Everything else is discoverable from the leader menu.</p>
+    <div class="qgrid">
+      <div class="qrow"><kbd class="lead">Spc</kbd><kbd>f</kbd><kbd>f</kbd><span class="lbl">find files</span></div>
+      <div class="qrow"><kbd class="lead">Spc</kbd><kbd>f</kbd><kbd>g</kbd><span class="lbl">grep the project</span></div>
+      <div class="qrow"><kbd class="lead">Spc</kbd><kbd>e</kbd><span class="lbl">file tree</span></div>
+      <div class="qrow"><kbd class="lead">Spc</kbd><kbd>g</kbd><kbd>g</kbd><span class="lbl">lazygit</span></div>
+      <div class="qrow"><kbd>g</kbd><kbd>d</kbd><span class="lbl">go to definition</span></div>
+      <div class="qrow"><kbd>g</kbd><kbd>r</kbd><kbd>r</kbd><span class="lbl">references</span></div>
+      <div class="qrow"><kbd>g</kbd><kbd>r</kbd><kbd>n</kbd><span class="lbl">rename symbol</span></div>
+      <div class="qrow"><kbd class="lead">Spc</kbd><kbd>c</kbd><kbd>a</kbd><span class="lbl">code action</span></div>
+      <div class="qrow"><kbd>Tab</kbd><span class="lbl">next buffer</span></div>
+      <div class="qrow"><kbd class="lead">Spc</kbd><kbd>b</kbd><kbd>d</kbd><span class="lbl">close buffer</span></div>
+      <div class="qrow"><kbd>j</kbd><kbd>k</kbd><span class="lbl">escape insert</span></div>
+      <div class="qrow"><kbd>s</kbd><span class="lbl">jump anywhere</span></div>
+    </div>
+  </section>
+
+  <h2 class="section-title">Terminal</h2>
+  <div class="grid" id="grid-term">
+
+    <div class="card" data-tool="alacritty" style="--tool: var(--peach)">
+      <div class="card-head"><span class="badge">⌘</span><h3>Alacritty</h3><span class="note">live reload</span></div>
+      <table>
+        <tr><td class="k"><kbd>⌘</kbd><kbd>N</kbd></td><td class="d">New window — gets its own tmux session</td></tr>
+        <tr><td class="k"><kbd>⌘</kbd><kbd>↵</kbd></td><td class="d">Fullscreen</td></tr>
+        <tr><td class="k"><kbd>⌘</kbd><kbd>+</kbd> <span class="then">/</span> <kbd>−</kbd> <span class="then">/</span> <kbd>0</kbd></td><td class="d">Font size up, down, reset</td></tr>
+        <tr><td class="k"><kbd>⌘</kbd><kbd>K</kbd></td><td class="d">Clear scrollback</td></tr>
+        <tr><td class="k"><kbd>⌘</kbd><kbd>F</kbd></td><td class="d">Search the buffer</td></tr>
+        <tr><td class="k"><kbd>⌃</kbd><kbd>⇧</kbd><kbd>Space</kbd></td><td class="d">Vi mode — scroll and select with hjkl</td></tr>
+      </table>
+    </div>
+
+    <div class="card" data-tool="tmux" style="--tool: var(--green)">
+      <div class="card-head"><span class="badge">⌘</span><h3>tmux via ⌘ keys</h3><span class="note">Warp-like</span></div>
+      <table>
+        <tr><td class="k"><kbd>⌘</kbd><kbd>T</kbd></td><td class="d">New window (tab)</td></tr>
+        <tr><td class="k"><kbd>⌘</kbd><kbd>D</kbd></td><td class="d">Split right</td></tr>
+        <tr><td class="k"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>D</kbd></td><td class="d">Split down</td></tr>
+        <tr><td class="k"><kbd>⌘</kbd><kbd>W</kbd></td><td class="d">Close pane — asks first</td></tr>
+        <tr><td class="k"><kbd>⌘</kbd><kbd>1</kbd>…<kbd>5</kbd></td><td class="d">Jump to window</td></tr>
+        <tr><td class="k"><kbd>⌥</kbd><kbd>←</kbd> <span class="then">/</span> <kbd>→</kbd></td><td class="d">Previous / next window</td></tr>
+      </table>
+    </div>
+
+    <div class="card" data-tool="tmux" style="--tool: var(--green)">
+      <div class="card-head"><span class="badge">⌃a</span><h3>tmux prefix</h3><span class="note">then the key</span></div>
+      <table>
+        <tr><td class="k"><kbd>⌃a</kbd><kbd>|</kbd> <span class="then">/</span> <kbd>−</kbd></td><td class="d">Split right / down, keeping the directory</td></tr>
+        <tr><td class="k"><kbd>⌃a</kbd><kbd>h</kbd><kbd>j</kbd><kbd>k</kbd><kbd>l</kbd></td><td class="d">Move between panes</td></tr>
+        <tr><td class="k"><kbd>⌃a</kbd><kbd>H</kbd><kbd>J</kbd><kbd>K</kbd><kbd>L</kbd></td><td class="d">Resize pane — repeatable</td></tr>
+        <tr><td class="k"><kbd>⌃a</kbd><kbd>z</kbd></td><td class="d">Zoom pane fullscreen</td></tr>
+        <tr><td class="k"><kbd>⌃a</kbd><kbd>↵</kbd></td><td class="d">Copy mode — <kbd>v</kbd> select, <kbd>y</kbd> yank to clipboard</td></tr>
+        <tr><td class="k"><kbd>⌃a</kbd><kbd>d</kbd></td><td class="d">Detach — the session keeps running</td></tr>
+        <tr><td class="k"><kbd>⌃a</kbd><kbd>r</kbd></td><td class="d">Reload tmux.conf</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h2 class="section-title">Neovim — finding things</h2>
+  <div class="grid">
+
+    <div class="card" data-tool="nvim" style="--tool: var(--blue)">
+      <div class="card-head"><span class="badge">f</span><h3>Files</h3></div>
+      <table>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>f</kbd><kbd>f</kbd></td><td class="d">Find files</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>f</kbd><kbd>F</kbd></td><td class="d">Find files including hidden and ignored</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>f</kbd><kbd>g</kbd></td><td class="d">Grep across the project</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>f</kbd><kbd>r</kbd></td><td class="d">Recent files</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>f</kbd><kbd>b</kbd></td><td class="d">Open buffers</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>f</kbd><kbd>p</kbd></td><td class="d">Recent projects</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>f</kbd><kbd>c</kbd></td><td class="d">A file in the nvim config</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>f</kbd><kbd>n</kbd></td><td class="d">New file</td></tr>
+      </table>
+    </div>
+
+    <div class="card" data-tool="nvim" style="--tool: var(--blue)">
+      <div class="card-head"><span class="badge">s</span><h3>Search</h3></div>
+      <table>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>s</kbd><kbd>w</kbd></td><td class="d">Word under cursor — works on a selection</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>s</kbd><kbd>b</kbd></td><td class="d">Fuzzy find in this buffer</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>s</kbd><kbd>s</kbd></td><td class="d">Document symbols</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>s</kbd><kbd>S</kbd></td><td class="d">Workspace symbols</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>s</kbd><kbd>d</kbd></td><td class="d">Diagnostics in this buffer</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>s</kbd><kbd>k</kbd></td><td class="d">Keymaps — searchable, like this page</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>s</kbd><kbd>t</kbd></td><td class="d">TODO comments</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>s</kbd><kbd>R</kbd></td><td class="d">Resume the last picker</td></tr>
+      </table>
+    </div>
+
+    <div class="card" data-tool="nvim" style="--tool: var(--blue)">
+      <div class="card-head"><span class="badge">b</span><h3>Buffers &amp; tree</h3></div>
+      <table>
+        <tr><td class="k"><kbd>Tab</kbd> <span class="then">/</span> <kbd>⇧</kbd><kbd>Tab</kbd></td><td class="d">Next / previous buffer</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>b</kbd><kbd>d</kbd></td><td class="d">Close buffer</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>b</kbd><kbd>o</kbd></td><td class="d">Close all other buffers</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>b</kbd><kbd>b</kbd></td><td class="d">Back to the previous buffer</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>e</kbd></td><td class="d">Toggle file tree</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>E</kbd></td><td class="d">Focus the file tree</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h2 class="section-title">Neovim — writing code</h2>
+  <div class="grid">
+
+    <div class="card" data-tool="nvim" style="--tool: var(--blue)">
+      <div class="card-head"><span class="badge">g</span><h3>Navigate code</h3><span class="note">built into nvim</span></div>
+      <table>
+        <tr><td class="k"><kbd>g</kbd><kbd>d</kbd></td><td class="d">Definition</td></tr>
+        <tr><td class="k"><kbd>g</kbd><kbd>r</kbd><kbd>r</kbd></td><td class="d">References</td></tr>
+        <tr><td class="k"><kbd>g</kbd><kbd>r</kbd><kbd>n</kbd></td><td class="d">Rename symbol</td></tr>
+        <tr><td class="k"><kbd>g</kbd><kbd>r</kbd><kbd>a</kbd></td><td class="d">Code action</td></tr>
+        <tr><td class="k"><kbd>g</kbd><kbd>r</kbd><kbd>i</kbd></td><td class="d">Implementation</td></tr>
+        <tr><td class="k"><kbd>g</kbd><kbd>r</kbd><kbd>t</kbd></td><td class="d">Type definition</td></tr>
+        <tr><td class="k"><kbd>K</kbd></td><td class="d">Hover docs — falls back to <span class="inline">:help</span></td></tr>
+        <tr><td class="k"><kbd>]</kbd><kbd>d</kbd> <span class="then">/</span> <kbd>[</kbd><kbd>d</kbd></td><td class="d">Next / previous diagnostic</td></tr>
+        <tr><td class="k"><kbd>]</kbd><kbd>e</kbd> <span class="then">/</span> <kbd>[</kbd><kbd>e</kbd></td><td class="d">Next / previous error</td></tr>
+      </table>
+    </div>
+
+    <div class="card" data-tool="nvim" style="--tool: var(--blue)">
+      <div class="card-head"><span class="badge">c</span><h3>Code actions</h3></div>
+      <table>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>c</kbd><kbd>a</kbd></td><td class="d">Code action</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>c</kbd><kbd>r</kbd></td><td class="d">Rename (NvChad's popup)</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>c</kbd><kbd>f</kbd></td><td class="d">Format buffer</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>c</kbd><kbd>d</kbd></td><td class="d">Line diagnostics</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>c</kbd><kbd>s</kbd></td><td class="d">Symbol outline</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>c</kbd><kbd>v</kbd></td><td class="d">Pick a Python venv</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>c</kbd><kbd>l</kbd></td><td class="d">LSP health</td></tr>
+      </table>
+    </div>
+
+    <div class="card" data-tool="nvim" style="--tool: var(--blue)">
+      <div class="card-head"><span class="badge">·</span><h3>Editing</h3></div>
+      <table>
+        <tr><td class="k"><kbd>j</kbd><kbd>k</kbd></td><td class="d">Escape insert mode</td></tr>
+        <tr><td class="k"><kbd>⌃</kbd><kbd>s</kbd></td><td class="d">Save</td></tr>
+        <tr><td class="k"><kbd>s</kbd> <span class="then">/</span> <kbd>S</kbd></td><td class="d">Flash jump / treesitter jump</td></tr>
+        <tr><td class="k"><kbd>⌥</kbd><kbd>j</kbd> <span class="then">/</span> <kbd>⌥</kbd><kbd>k</kbd></td><td class="d">Move line or selection</td></tr>
+        <tr><td class="k"><kbd>&lt;</kbd> <span class="then">/</span> <kbd>&gt;</kbd></td><td class="d">Indent, keeping the selection</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>/</kbd></td><td class="d">Toggle comment (<span class="inline">gcc</span> works too)</td></tr>
+        <tr><td class="k"><kbd>g</kbd><kbd>s</kbd><kbd>a</kbd></td><td class="d">Surround — add</td></tr>
+        <tr><td class="k"><kbd>g</kbd><kbd>s</kbd><kbd>d</kbd> <span class="then">/</span> <kbd>g</kbd><kbd>s</kbd><kbd>r</kbd></td><td class="d">Surround — delete / replace</td></tr>
+        <tr><td class="k"><kbd>;</kbd> <span class="then">/</span> <kbd>,</kbd></td><td class="d">Repeat / reverse the last <span class="inline">f</span> or <span class="inline">t</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h2 class="section-title">Neovim — the work around the code</h2>
+  <div class="grid">
+
+    <div class="card" data-tool="nvim" style="--tool: var(--green)">
+      <div class="card-head"><span class="badge">g</span><h3>Git</h3></div>
+      <table>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>g</kbd><kbd>g</kbd></td><td class="d">Lazygit</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>g</kbd><kbd>s</kbd></td><td class="d">Status</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>g</kbd><kbd>c</kbd></td><td class="d">Commits</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>g</kbd><kbd>B</kbd></td><td class="d">Branches</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>g</kbd><kbd>d</kbd></td><td class="d">Diff view</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>g</kbd><kbd>b</kbd></td><td class="d">Blame this line</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>g</kbd><kbd>p</kbd></td><td class="d">Preview hunk</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>g</kbd><kbd>S</kbd> <span class="then">/</span> <kbd>g</kbd><kbd>r</kbd></td><td class="d">Stage / reset hunk</td></tr>
+        <tr><td class="k"><kbd>]</kbd><kbd>h</kbd> <span class="then">/</span> <kbd>[</kbd><kbd>h</kbd></td><td class="d">Next / previous hunk</td></tr>
+      </table>
+    </div>
+
+    <div class="card" data-tool="nvim" style="--tool: var(--red)">
+      <div class="card-head"><span class="badge">x</span><h3>Diagnostics</h3></div>
+      <table>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>x</kbd><kbd>x</kbd></td><td class="d">This buffer's problems</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>x</kbd><kbd>X</kbd></td><td class="d">Whole workspace</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>x</kbd><kbd>Q</kbd></td><td class="d">Quickfix list</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>x</kbd><kbd>L</kbd></td><td class="d">Location list</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>x</kbd><kbd>t</kbd></td><td class="d">TODO list</td></tr>
+      </table>
+    </div>
+
+    <div class="card" data-tool="nvim" style="--tool: var(--yellow)">
+      <div class="card-head"><span class="badge">t</span><h3>Tests</h3><span class="note">jest · vitest · go · py</span></div>
+      <table>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>t</kbd><kbd>r</kbd></td><td class="d">Run nearest test</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>t</kbd><kbd>t</kbd></td><td class="d">Run the file</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>t</kbd><kbd>l</kbd></td><td class="d">Run the last one again</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>t</kbd><kbd>s</kbd></td><td class="d">Summary panel</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>t</kbd><kbd>o</kbd></td><td class="d">Show output</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>t</kbd><kbd>d</kbd></td><td class="d">Debug the nearest test</td></tr>
+      </table>
+    </div>
+
+    <div class="card" data-tool="nvim" style="--tool: var(--red)">
+      <div class="card-head"><span class="badge">d</span><h3>Debug</h3><span class="note">go · py · js/ts</span></div>
+      <table>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>d</kbd><kbd>b</kbd></td><td class="d">Toggle breakpoint</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>d</kbd><kbd>B</kbd></td><td class="d">Conditional breakpoint</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>d</kbd><kbd>c</kbd></td><td class="d">Start / continue</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>d</kbd><kbd>i</kbd> <span class="then">/</span> <kbd>d</kbd><kbd>O</kbd> <span class="then">/</span> <kbd>d</kbd><kbd>o</kbd></td><td class="d">Step into / over / out</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>d</kbd><kbd>u</kbd></td><td class="d">Toggle the debug UI</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>d</kbd><kbd>t</kbd></td><td class="d">Terminate</td></tr>
+      </table>
+    </div>
+
+    <div class="card" data-tool="nvim" style="--tool: var(--mauve)">
+      <div class="card-head"><span class="badge">a</span><h3>Copilot</h3></div>
+      <table>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>a</kbd><kbd>a</kbd></td><td class="d">Toggle chat</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>a</kbd><kbd>e</kbd></td><td class="d">Explain the selection</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>a</kbd><kbd>f</kbd></td><td class="d">Fix</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>a</kbd><kbd>r</kbd></td><td class="d">Review</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>a</kbd><kbd>t</kbd></td><td class="d">Generate tests</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>a</kbd><kbd>c</kbd></td><td class="d">Write a commit message</td></tr>
+      </table>
+    </div>
+
+    <div class="card" data-tool="nvim" style="--tool: var(--mauve)">
+      <div class="card-head"><span class="badge">+</span><h3>Stack tools</h3><span class="note">db · python · md</span></div>
+      <table>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>D</kbd></td><td class="d">Database UI — Postgres, SQLite, MySQL</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>c</kbd><kbd>v</kbd></td><td class="d">Pick a Python venv (uv's <span class="inline">.venv</span> is automatic)</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>u</kbd><kbd>m</kbd></td><td class="d">Toggle markdown rendering in-buffer</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>m</kbd><kbd>p</kbd></td><td class="d">Markdown preview in the browser</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>n</kbd><kbd>s</kbd></td><td class="d">Dependency versions — inside package.json only</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>n</kbd><kbd>u</kbd></td><td class="d">Update a dependency — package.json only</td></tr>
+      </table>
+    </div>
+
+    <div class="card" data-tool="nvim" style="--tool: var(--blue)">
+      <div class="card-head"><span class="badge">u</span><h3>Toggles</h3></div>
+      <table>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>u</kbd><kbd>f</kbd></td><td class="d">Format on save</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>u</kbd><kbd>d</kbd></td><td class="d">Diagnostics</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>u</kbd><kbd>h</kbd></td><td class="d">Inlay hints</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>u</kbd><kbd>w</kbd></td><td class="d">Line wrap</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>u</kbd><kbd>s</kbd></td><td class="d">Spellcheck</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>t</kbd><kbd>h</kbd></td><td class="d">Theme picker</td></tr>
+      </table>
+    </div>
+
+    <div class="card" data-tool="nvim" style="--tool: var(--blue)">
+      <div class="card-head"><span class="badge">w</span><h3>Windows &amp; sessions</h3></div>
+      <table>
+        <tr><td class="k"><kbd>⌃</kbd><kbd>h</kbd><kbd>j</kbd><kbd>k</kbd><kbd>l</kbd></td><td class="d">Move between splits</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>w</kbd><kbd>−</kbd> <span class="then">/</span> <kbd>w</kbd><kbd>|</kbd></td><td class="d">Split below / right</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>w</kbd><kbd>d</kbd></td><td class="d">Close window</td></tr>
+        <tr><td class="k"><kbd>⌃</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd></td><td class="d">Resize</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>q</kbd><kbd>s</kbd></td><td class="d">Restore this folder's session</td></tr>
+        <tr><td class="k"><kbd class="lead">Spc</kbd><kbd>q</kbd><kbd>q</kbd></td><td class="d">Quit everything</td></tr>
+        <tr><td class="k"><kbd>⌃</kbd><kbd>/</kbd></td><td class="d">Floating terminal</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="empty" id="empty">No match. <kbd>Esc</kbd> to clear.</div>
+
+  <h2 class="section-title">Worth knowing</h2>
+  <div class="gotchas">
+    <div class="gotcha" style="--tool: var(--peach)">
+      <h4>Images need the browser</h4>
+      <p>Alacritty implements neither sixel nor the kitty graphics protocol, so images can't
+         draw in the terminal. <span class="inline">Spc m p</span> opens the preview where images
+         and mermaid diagrams both render.</p>
+    </div>
+    <div class="gotcha" style="--tool: var(--green)">
+      <h4>Go uses gofmt, not gofumpt</h4>
+      <p>Your repos enable <span class="inline">gofmt</span> + <span class="inline">goimports</span>
+         in <span class="inline">.golangci.yml</span>. gofumpt is stricter and would quietly
+         reformat beyond that, adding unrelated noise to reviews.</p>
+    </div>
+    <div class="gotcha" style="--tool: var(--blue)">
+      <h4>gr, K and ; are unmapped on purpose</h4>
+      <p>Neovim 0.11+ owns <span class="inline">gr*</span>. Mapping <span class="inline">gr</span>
+         makes it both a mapping and a prefix, so every built-in behind it waits out
+         <span class="inline">timeoutlen</span>.</p>
+    </div>
+    <div class="gotcha" style="--tool: var(--mauve)">
+      <h4>Keep the Mono in the font name</h4>
+      <p>In the plain Nerd Font family, icon ink is ~155% of a cell while advancing only one —
+         icons bleed and the cursor clips them. The <span class="inline">Mono</span> variants
+         scale icons to exactly one cell.</p>
+    </div>
+    <div class="gotcha" style="--tool: var(--yellow)">
+      <h4>Format on save is on</h4>
+      <p>Turn it off for the session with <span class="inline">Spc u f</span>, or per-buffer with
+         <span class="inline">:FormatDisable!</span>. <span class="inline">:FormatEnable</span>
+         brings it back.</p>
+    </div>
+    <div class="gotcha" style="--tool: var(--red)">
+      <h4>Check before you commit</h4>
+      <p>Editing <span class="inline">~/.config/nvim</span> edits the dotfiles repo directly —
+         stow symlinks it. Run <span class="inline">~/dotfiles/check.sh</span> to assert all
+         35 invariants still hold.</p>
+    </div>
+  </div>
+
+  <footer>
+    <span>Read from the live config — 224 mappings</span>
+    <span>github.com/er1cAk/dotfiles</span>
+    <span>Space is leader · <kbd>/</kbd> searches this page</span>
+  </footer>
+</div>
+
+<script>
+  const q = document.getElementById('q');
+  const countEl = document.getElementById('count');
+  const emptyEl = document.getElementById('empty');
+  const cards = Array.from(document.querySelectorAll('.card'));
+  const titles = Array.from(document.querySelectorAll('.section-title'));
+  const chips = Array.from(document.querySelectorAll('.chip'));
+  let tool = 'all';
+
+  const totalRows = document.querySelectorAll('.card tr').length;
+
+  function apply() {
+    const term = q.value.trim().toLowerCase();
+    let shown = 0;
+
+    cards.forEach(card => {
+      const toolOk = tool === 'all' || card.dataset.tool === tool;
+      let cardHas = false;
+
+      card.querySelectorAll('tr').forEach(row => {
+        const hit = !term || row.textContent.toLowerCase().includes(term);
+        row.classList.toggle('hidden', !(hit && toolOk));
+        if (hit && toolOk) { cardHas = true; shown++; }
+      });
+
+      card.classList.toggle('hidden', !cardHas);
+    });
+
+    // hide a section heading whose cards are all gone
+    titles.forEach(t => {
+      let n = t.nextElementSibling;
+      let any = false;
+      while (n && !n.classList.contains('section-title')) {
+        if (n.classList.contains('grid') || n.classList.contains('gotchas')) {
+          any = any || Array.from(n.children).some(c => !c.classList.contains('hidden'));
+        }
+        n = n.nextElementSibling;
+      }
+      t.classList.toggle('hidden', !any);
+    });
+
+    const filtering = term || tool !== 'all';
+    countEl.textContent = filtering ? shown + ' of ' + totalRows : totalRows + ' bindings';
+    emptyEl.style.display = shown === 0 ? 'block' : 'none';
+  }
+
+  q.addEventListener('input', apply);
+
+  chips.forEach(c => c.addEventListener('click', () => {
+    chips.forEach(o => o.setAttribute('aria-pressed', String(o === c)));
+    tool = c.dataset.tool;
+    apply();
+  }));
+
+  // vim-ish: / focuses search, Esc clears it
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && document.activeElement !== q) { e.preventDefault(); q.focus(); q.select(); }
+    if (e.key === 'Escape' && document.activeElement === q) { q.value = ''; q.blur(); apply(); }
+  });
+
+  apply();
+</script>

@@ -1,5 +1,9 @@
 # Terminal + Editor setup
 
+> **Searchable web version:** https://claude.ai/code/artifact/3ff8b5df-4807-4d48-b32d-64c7a6a97f43
+> A local copy lives at `nvim/.config/nvim/keymap.html` — `open ~/.config/nvim/keymap.html`.
+> It filters live, so it beats scrolling this file when you're hunting one key.
+
 Alacritty (Catppuccin Mocha, JetBrainsMono Nerd Font 16) → tmux session `main` → NvChad.
 
 Everything below is what *your* config binds. `<leader>` is **Space**.
