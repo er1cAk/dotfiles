@@ -310,8 +310,10 @@ Your LazyVim setup was moved aside, not deleted:
 
 ```
 ~/.config/nvim.lazyvim.bak-20260820-222701      (80K, kept)
-~/.config/alacritty/alacritty.toml.bak
 ```
+
+The original 9-line Alacritty config lives in this repo's git history rather than a
+`.bak` file: `git log --follow alacritty/.config/alacritty/alacritty.toml`.
 
 The 80K config backup contains `lazy-lock.json` pinning all 79 LazyVim plugins, so the
 whole setup restores from it alone. The 3.5 GB of plugin/Mason data and 206 MB of state

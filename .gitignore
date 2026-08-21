@@ -13,3 +13,6 @@ nvim/.config/nvim/plugin/
 
 # Copilot credentials live in ~/.config/github-copilot -- never track them.
 github-copilot/
+
+# stale local backups -- git history serves this purpose now
+*.bak
