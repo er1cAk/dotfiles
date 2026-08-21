@@ -76,9 +76,9 @@ out upstream fixes. The safety net is `check.sh` plus a runtime warning (see bel
 - **Font must be a `Nerd Font Mono` variant.** In the plain family, icon glyphs draw ink at
   ~155% of the cell width while advancing only one cell, so icons bleed into neighbours
   and the block cursor visibly clips them. `check.sh` asserts this.
-- **Go formats with `gofmt`, not `gofumpt`** — CloudTalk's `.golangci.yml` enables
-  `gofmt` + `goimports`. gofumpt is stricter and quietly reformats beyond what those
-  repos expect, adding unrelated noise to PRs. `check.sh` asserts this with an input the
+- **Go formats with `gofmt`, not `gofumpt`** — the Go repos I work in enable
+  `gofmt` + `goimports` in `.golangci.yml`. gofumpt is stricter and quietly reformats
+  beyond what those repos expect, adding unrelated noise to PRs. `check.sh` asserts this with an input the
   two formatters disagree on.
 - **`gr`, `K` and `;` are intentionally unmapped.** Neovim 0.11+ provides `grn`/`gra`/
   `grr`/`gri`/`grt`, `K` with a `keywordprg` fallback, and insert-mode `<C-s>`. Mapping

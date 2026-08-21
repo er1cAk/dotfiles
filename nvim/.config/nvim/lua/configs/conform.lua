@@ -21,7 +21,7 @@ local options = {
     graphql = { "prettierd", "prettier", stop_after_first = true },
 
     -- go
-    -- gofmt, not gofumpt: CloudTalk's .golangci.yml enables gofmt + goimports.
+    -- gofmt, not gofumpt: the Go repos I work in enable gofmt + goimports.
     -- gofumpt is stricter, so it silently reformats beyond what those repos
     -- expect and adds unrelated noise to PRs.
     go = { "goimports", "gofmt" },

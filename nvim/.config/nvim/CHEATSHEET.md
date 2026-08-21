@@ -137,9 +137,9 @@ NvChad's cheatsheet.
 | `<leader>xx` `<leader>xX` | Trouble: buffer / workspace diagnostics |
 | `<leader>xL` `<leader>xQ` `<leader>xt` | Loclist / quickfix / todos |
 
-**Go formats with `gofmt`, not `gofumpt`** — CloudTalk's `.golangci.yml` enables
-`gofmt` + `goimports`, and gofumpt is stricter, so it would quietly reformat beyond
-what those repos expect and add noise to PRs.
+**Go formats with `gofmt`, not `gofumpt`** — the Go repos I work in enable `gofmt` +
+`goimports` in `.golangci.yml`, and gofumpt is stricter, so it would quietly reformat
+beyond what those repos expect and add noise to PRs.
 
 **Format on save is on** (conform.nvim). Toggle it with `<leader>uf`, or
 `:FormatDisable` / `:FormatDisable!` (buffer only) / `:FormatEnable`.

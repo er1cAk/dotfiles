@@ -127,9 +127,9 @@ done < <(nvim --headless -c "luafile $SCRATCH/keymaps.lua" 2>&1)
 # ------------------------------------------------------------ formatting ---
 head_ "Formatting"
 
-# gofumpt vs gofmt: CloudTalk repos enable gofmt + goimports, so gofumpt would
-# silently reformat beyond what they expect. This input distinguishes them --
-# gofumpt rewrites 0666 to 0o666 and strips the blank line after '{'.
+# gofumpt vs gofmt: the Go repos this is used with enable gofmt + goimports, so
+# gofumpt would silently reformat beyond what they expect. This input distinguishes
+# them -- gofumpt rewrites 0666 to 0o666 and strips the blank line after '{'.
 mkdir -p "$SCRATCH/go" && printf 'module t\n\ngo 1.21\n' > "$SCRATCH/go/go.mod"
 cat > "$SCRATCH/go/m.go" <<'GO'
 package main
@@ -149,7 +149,7 @@ GO
 if grep -q '0666' "$SCRATCH/go/m.go" && sed -n '6p' "$SCRATCH/go/m.go" | grep -q '^$'; then
   ok "Go formats with gofmt, not gofumpt"
 else
-  bad "Go was reformatted by gofumpt -- will add noise to CloudTalk PRs"
+  bad "Go was reformatted by gofumpt -- will add unrelated noise to PRs"
 fi
 
 printf 'const x = {a:1,b:2}\n' > "$SCRATCH/t.ts"
