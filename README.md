@@ -126,6 +126,13 @@ Global ignores live at `~/.config/git/ignore` (the XDG path git reads automatica
 `core.excludesfile` is deliberately unset — it previously pointed at an absolute
 `/Users/…` path while a second, unused ignore file sat at the XDG location.
 
-## Reference
+## Documentation
 
-Full keybinding reference: `nvim/.config/nvim/CHEATSHEET.md`.
+| | |
+|---|---|
+| [`docs/keymap.html`](docs/keymap.html) | Searchable keybinding reference — open it in a browser: `open ~/dotfiles/docs/keymap.html`. Generated from the live config, filters as you type. |
+| [`docs/CHEATSHEET.md`](docs/CHEATSHEET.md) | The same reference in markdown, plus setup notes and rollback steps. |
+
+Both are generated from what the config actually binds, not from memory —
+`nvim_get_keymap` is the source, and the keys are cross-checked against it before
+either file is updated. An earlier hand-written version drifted from reality within a day.
