@@ -124,6 +124,18 @@ if [[ -d /Applications/Alacritty.app ]]; then
   fi
 fi
 
+# ------------------------------------------------------------- keyboard ---
+say "macOS key repeat"
+
+# Holding j/k/w is how you move in Neovim, and the macOS defaults cap that speed.
+# 15 and 2 are the fastest the System Settings sliders allow (units of 15ms: repeat
+# starts after 225ms, then every 30ms). Press-and-hold accents are switched off for
+# Alacritty only, so holding a letter there repeats it; other apps keep the accent
+# menu. Takes effect after logging out and back in.
+run defaults write -g InitialKeyRepeat -int 15
+run defaults write -g KeyRepeat -int 2
+run defaults write org.alacritty ApplePressAndHoldEnabled -bool false
+
 # --------------------------------------------------------------- neovim ---
 say "Neovim plugins, tools and parsers (this takes ~10 minutes)"
 

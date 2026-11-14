@@ -253,6 +253,12 @@ else
   bad "zsh startup printed errors:"; sed 's/^/       /' <<<"$ZSH_ERR" | head -6
 fi
 
+if [[ "$(defaults read -g InitialKeyRepeat 2>/dev/null)" == 15 && "$(defaults read -g KeyRepeat 2>/dev/null)" == 2 ]]; then
+  ok "key repeat at install.sh's values (225ms delay, then every 30ms)"
+else
+  bad "key repeat is not at install.sh's values: holding j/k in Neovim stays slow (re-run install.sh, then log out)"
+fi
+
 # starship reports a bad key or palette colour only when it renders, so a typo
 # would otherwise surface as a warning on every prompt rather than here.
 if [[ -z "$(STARSHIP_LOG=warn starship prompt 2>&1 >/dev/null)" ]]; then
