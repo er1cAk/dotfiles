@@ -58,6 +58,13 @@ Stow packages; each mirrors `$HOME`.
 
 ```
 nvim/.config/nvim/              editor config + lazy-lock.json
+  lua/mappings.lua              keymaps
+  lua/options.lua               vim options
+  lua/autocmds.lua              autocommands, including the nvdash patch
+  lua/chadrc.lua                theme and NvChad UI
+  lua/configs/lspconfig.lua     LSP servers and diagnostics
+  lua/configs/conform.lua       formatters and format-on-save
+  lua/plugins/*.lua             plugin specs
 alacritty/.config/alacritty/    alacritty.toml + tmux-session.sh
 tmux/.tmux.conf
 zsh/.zshrc
@@ -148,8 +155,11 @@ Global ignores live at `~/.config/git/ignore` (the XDG path git reads automatica
 | | |
 |---|---|
 | [`docs/keymap.html`](docs/keymap.html) | Searchable keybinding reference — open it in a browser: `open ~/dotfiles/docs/keymap.html`. Generated from the live config, filters as you type. |
-| [`docs/CHEATSHEET.md`](docs/CHEATSHEET.md) | The same reference in markdown, plus setup notes and rollback steps. |
+| [`docs/cheatsheet.pdf`](docs/cheatsheet.pdf) | Two printable pages covering every tool: Alacritty, tmux, zsh, fzf, zoxide, the prompt, git, lazygit and Neovim. Edit `docs/cheatsheet/spec.txt`, then run `docs/cheatsheet/build.sh` (needs Chrome). |
 
-Both are generated from what the config actually binds, not from memory —
-`nvim_get_keymap` is the source, and the keys are cross-checked against it before
-either file is updated. An earlier hand-written version drifted from reality within a day.
+Both list what the config actually binds, not what memory says: every key was checked
+against its source (`nvim_get_keymap`, `tmux list-keys`, `alacritty.toml`, `bindkey`)
+before it went in, so check a key the same way before adding or changing it. An earlier
+hand-written version drifted from reality within a day. The two overlap on Neovim keys,
+so a Neovim mapping change means updating both. `build.sh` refuses to write a PDF when
+a section would be clipped off the page.

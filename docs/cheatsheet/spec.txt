@@ -1,0 +1,187 @@
+=== PAGE
+## Alacritty | blue | the terminal app; config reloads on save
+{⌘N} | New window with its own tmux session
+{⌘↩} | Toggle fullscreen
+{⌘=} {⌘-} {⌘0} | Font size up / down / reset
+{⌘K} | Clear scrollback
+{⌘F} {⌘B} | Search forward / backward
+{⇧PgUp} {⇧PgDn} | Scroll a page; {⇧Home} {⇧End} top / bottom
+{⌃⇧␣} | Vi mode: hjkl to move, {v} select, {y} copy
+{⇧↩} | Newline without submitting (Claude Code, REPLs)
+{⌘C} {⌘V} | Copy / paste
+
+## tmux | green | panes and windows; prefix is {⌃a}
+### From Alacritty, no prefix
+{⌘T} | New window (tab)
+{⌘D} {⌘⇧D} | Split right / down
+{⌘W} {⌘⇧W} | Close pane / window (asks first)
+{⌘1} … {⌘9} | Go to window 1 to 9
+{⌘⇧[} {⌘⇧]} | Previous / next window (also {⌥←} {⌥→})
+{⌘P} | Pick a window from a tree
+{⌘⇧↩} | Zoom pane (toggle)
+### Prefix {⌃a}, then
+{c} | New window in the current directory
+{|} {-} | Split right / down in the current directory
+{h} {j} {k} {l} | Move between panes
+{H} {J} {K} {L} | Resize pane (hold to repeat)
+{z} {␣} | Zoom pane / cycle layouts
+{x} {X} | Close pane / window (asks first)
+{w} {s} | Window tree / session tree
+{d} {r} | Detach (keeps running) / reload config
+{↩} | Copy mode: {v} select, {⌃v} block, {y} copy, {Esc} quit
+{?} | List every binding
+> Mouse is on: click a pane, drag a border, scroll, drag to copy. Reattach from any shell with <code>tmux attach -t main</code>.
+
+## zsh | mauve | editing the command line
+{⌃A} {⌃E} | Start / end of line
+{⌥B} {⌥F} | Word back / forward
+{⌃W} {⌃U} | Delete word / whole line
+{↑} {↓} | History, shared live across all panes
+{␣}<i>cmd</i> | Leading space: never saved to history (for tokens)
+<span class=ghost>grey text</span> | Suggestion from history: {→} or {⌃E} takes it, {⌥F} one word
+<span class=ok>green</span> <span class=bad>red</span> | Command exists / not found, before you press {↩}
+{nv} | Neovim with the project's DB credentials (Infisical, else .env)
+
+## fzf | peach | fuzzy finder, wired into zsh
+{⌃R} | Search all history
+{⌃T} | Insert a file path ({Tab} marks several; skips .gitignored files)
+{⌥C} | cd into a subdirectory
+{**}{Tab} | Fuzzy-complete any argument: <code>vim **</code>, <code>cd **</code>, <code>ssh **</code>, <code>kill -9 **</code>
+### Inside the picker
+{↑} {↓} | Move (also {⌃J} {⌃K}); {↩} picks, {Esc} cancels
+> Search syntax: <code>'exact</code> <code>^prefix</code> <code>suffix$</code> <code>!exclude</code>, and <code>a | b</code> for either.
+
+## zoxide | teal | jump to directories you use
+{z lois} | Best-ranked directory matching "lois"
+{z lois front} | More words narrow it down
+{zi lois} | Choose among the matches with fzf
+{z -} | Back to the previous directory
+> Learns from every <code>cd</code>; frequent and recent directories rank first.
+
+## Prompt | yellow | reading starship's two lines
+@@PROMPT@@
+{❯} | <span class=ok>green</span>: last command succeeded; <span class=bad>red</span>: it failed
+{?} {!} {+} | Untracked / modified / staged files
+{✘} {»} {=} | Deleted / renamed / conflicted
+{$} | A stash exists
+{⇡3} {⇣3} | Commits ahead of / behind upstream
+<b>REBASING 2/5</b> | Unfinished rebase, merge, cherry-pick or bisect
+> The path starts at the repo root. <code>user@host</code> appears only over SSH. Node, Python (with venv) and Go versions appear only in projects that use them.
+
+## git | red | what the config does for you
+<b>Identity</b> | Repos under <code>~/Work</code> commit with the work email, everything else with the personal one
+<b>Diffs</b> | <code>git diff</code>, <code>show</code>, <code>log -p</code> and <code>add -p</code> render through diff-so-fancy
+<b>Fixups</b> | <code>git commit --fixup &lt;sha&gt;</code>, then <code>git rebase -i &lt;base&gt;</code>: autosquash lines them up
+<b>Pull</b> | Fast-forward only: it never creates a surprise merge commit
+
+
+=== PAGE | Neovim and lazygit | NvChad. Leader is {␣} Space: press it and wait for the menu, or {␣ch} for every key
+## Files and search | green | -
+{␣ff} {␣fF} | Find files / including hidden and ignored
+{␣fg} {␣sg} | Live grep
+{␣fr} {␣fb} | Recent files / open buffers
+{␣fp} | Recent projects
+{␣fc} | A file in the Neovim config
+{␣sw} | Grep the word under cursor (or selection)
+{␣sb} | Fuzzy find in this buffer
+{␣sk} {␣sc} {␣sh} | Keymaps / commands / help
+{␣sd} {␣sD} | Diagnostics: buffer / workspace
+{␣ss} {␣sS} | Symbols: document / workspace
+{␣sR} | Resume the last picker
+{␣st} | TODO comments
+{␣e} {⌃N} | Toggle file tree; {␣E} focuses it
+## Buffers and windows | blue | -
+{Tab} {⇧Tab} | Next / previous buffer (also {]b} {[b})
+{␣bn} {␣bb} | New buffer / previous buffer
+{␣bd} {␣bD} | Close buffer / force close
+{␣bo} {␣ba} | Close other / all buffers
+{⌃H} {⌃J} {⌃K} {⌃L} | Move between splits
+{␣w-} {␣w|} | Split below / right
+{␣wd} {␣ww} {␣w=} | Close / other / equalise
+{⌃←} {⌃→} {⌃↑} {⌃↓} | Resize split
+## Editing | mauve | -
+{jk} | Leave insert mode
+{⌃S} | Save (normal and insert mode)
+{s} {S} | Flash jump / treesitter jump
+{⌥J} {⌥K} | Move line or selection down / up
+{<} {>} | Indent selection and keep it selected
+{␣/} {gcc} | Toggle comment
+{gsa} {gsd} {gsr} | Surround add / delete / replace
+{;} {,} | Repeat / reverse the last f or t
+{⌃/} {⌥I} | Floating terminal
+{⌥H} {⌥V} | Horizontal / vertical terminal
+
+## Code and LSP | peach | -
+{gd} {gD} {gI} {gy} | Definition / declaration / implementation / type
+{grr} {gri} {grt} | References / implementations / type definition
+{grn} {gra} | Rename / code action (also {␣cr} {␣ca})
+{K} {gK} | Hover docs / signature help
+{␣cf} {␣fm} | Format buffer (also on save; {␣uf} toggles it)
+{␣cd} | Diagnostics for this line
+{]d} {[d} | Next / previous diagnostic ({]e} {[e} errors only)
+{␣xx} {␣xX} | Trouble: buffer / workspace diagnostics
+{␣cs} | Symbol outline
+{␣xL} {␣xQ} {␣xt} | Location list / quickfix / todos
+## Git | red | -
+{␣gg} {␣gf} | LazyGit / history of this file
+{]h} {[h} | Next / previous hunk
+{␣gp} {␣gb} | Preview hunk / blame line
+{␣gS} {␣gr} | Stage / reset hunk
+{␣gs} {␣gc} {␣gB} | Status / commits / branches
+{␣gd} {␣gD} {␣gq} | Diffview: open / file history / close
+
+## Tests and debugging | teal | -
+{␣tr} {␣tt} {␣tl} | Run nearest / file / last test
+{␣ts} {␣to} {␣tO} | Summary / output / output panel
+{␣td} {␣tS} | Debug nearest test / stop
+{␣db} {␣dB} | Breakpoint / conditional breakpoint
+{␣dc} {␣di} {␣dO} {␣do} | Continue / step into / over / out
+{␣du} {␣dr} {␣dt} | Debug UI / REPL / terminate
+{␣dg} | Debug the Go test under the cursor
+> Tests: jest, vitest, go, python. Debugging: Go, Python, JS/TS.
+## AI (Copilot) | sapphire | -
+{␣aa} | Toggle Copilot Chat
+{␣ae} {␣af} {␣ar} | Explain / fix / review (works on a selection)
+{␣at} {␣ao} {␣ac} | Write tests / optimise / commit message
+> First use on a machine: <code>:Copilot auth</code>
+## Toggles and sessions | yellow | -
+{␣uw} {␣us} | Wrap / spelling
+{␣ul} {␣uL} {␣uc} | Line numbers / relative / cursorline
+{␣ud} {␣uh} {␣ug} | Diagnostics / inlay hints / git signs
+{␣th} | Theme picker
+{␣qs} {␣ql} {␣qS} | Restore session: this dir / last / pick
+{␣qq} | Quit all
+## Stack tools | green | -
+{␣D} | Database UI (connections come from <code>nv</code>)
+{␣S} {␣W} | In a SQL buffer: run the query under cursor / save it
+{␣ns} {␣nh} | In package.json: show / hide dependency versions
+{␣nu} {␣nc} | Update dependency / change its version
+{␣ni} {␣nd} | Install new / delete dependency
+{␣cv} | Pick a Python venv (the project .venv activates by itself)
+{␣um} {␣mp} | Markdown: render in buffer / preview in browser
+{␣l} {␣lm} | Lazy (plugins) / Mason (tools)
+
+## lazygit | sapphire | <code>lazygit</code> in a shell, or {␣gg} in Neovim
+### Anywhere
+{1} … {5} | Status, Files, Branches, Commits, Stash panels
+{[} {]} | Switch tab in a panel (remotes, tags, reflog…)
+{p} {P} | Pull / push
+{z} {Z} | Undo / redo
+{/} {?} {q} | Filter / every key / quit
+{+} | Bigger diff view (cycles)
+### Files
+{␣} {a} | Stage file / stage all
+{↩} | Stage single lines or hunks
+{c} {A} | Commit / amend last commit
+{d} {s} | Discard / stash
+{⌃F} | Find the commit to fix up
+### Commits
+{F} {S} | Create a fixup! for this commit / apply all fixups
+{s} {f} {r} {d} | Squash / fixup / reword / drop
+{e} | Edit: start an interactive rebase here
+{⌃J} {⌃K} | Move commit down / up
+{C} {V} | Copy (cherry-pick) / paste
+### Branches
+{␣} {n} {-} | Checkout / new / previous branch
+{r} {M} | Rebase onto / merge into current
+{o} | Create pull request

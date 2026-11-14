@@ -31,6 +31,8 @@ lines = 55
 # The "Mono" variant matters: in the plain family, Nerd Font icon ink is ~155% of
 # the cell width while still advancing only one cell, so icons bleed into the next
 # cell and the block cursor clips them. "Mono" scales icon ink to exactly one cell.
+# For a squarer face, "SauceCodePro Nerd Font Mono" (cell ratio 0.48 against 0.45;
+# cask font-sauce-code-pro-nerd-font) is a drop-in swap for the four family lines.
 [font]
 size = 16.0
 builtin_box_drawing = true
