@@ -73,6 +73,26 @@ else
   bad "startup produced output:"; sed 's/^/       /' <<<"$STARTUP" | head -6
 fi
 
+# Plugins must sit at their lockfile commits. On a fresh machine a single
+# `Lazy! restore` left lazy.nvim and NvChad's imported plugins at upstream HEAD
+# while every other check here still passed.
+DRIFT="$(python3 - "$HOME/.config/nvim/lazy-lock.json" "$HOME/.local/share/nvim/lazy" <<'PY'
+import json, os, subprocess, sys
+lock, root = json.load(open(sys.argv[1])), sys.argv[2]
+for name, entry in lock.items():
+    head = subprocess.run(["git", "-C", os.path.join(root, name), "rev-parse", "HEAD"],
+                          capture_output=True, text=True).stdout.strip()
+    if head != entry["commit"]:
+        print(f"{name} ({head[:8] or 'not installed'}, locked {entry['commit'][:8]})")
+PY
+)"
+if [[ -z "$DRIFT" ]]; then
+  ok "every plugin is at its lazy-lock.json commit"
+else
+  bad "plugins off their locked commit (run: nvim --headless '+Lazy! restore' +qa):"
+  sed 's/^/       /' <<<"$DRIFT" | head -10
+fi
+
 cat > "$SCRATCH/keymaps.lua" <<'LUA'
 local out = {}
 local function m(k, mode)

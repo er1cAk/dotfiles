@@ -16,7 +16,7 @@ symlink; move what they add into the local file before committing.
 git clone https://github.com/er1cAk/dotfiles ~/dotfiles
 cd ~/dotfiles
 ./install.sh          # ~10 minutes, mostly plugin/LSP/parser downloads
-./check.sh            # 39 assertions; everything should pass
+./check.sh            # 40 assertions; everything should pass
 ```
 
 Then two manual steps `install.sh` prints and cannot do for you:

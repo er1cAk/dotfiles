@@ -100,6 +100,13 @@ say "Neovim plugins, tools and parsers (this takes ~10 minutes)"
 # `restore` installs the exact commits in lazy-lock.json.
 # `sync` would UPDATE everything and REWRITE the lockfile -- the opposite of
 # reproducible. Do not change this to sync.
+#
+# Twice on purpose: on an empty machine the first pass only sees this config's
+# own specs. NvChad's plugins (base46, ui, gitsigns...) arrive through
+# `import = "nvchad.plugins"`, which resolves only once NvChad is cloned, and
+# lazy.nvim bootstraps from its `stable` branch, so the first pass leaves those
+# at upstream HEAD and the second pins them. A no-op on a machine already pinned.
+run nvim --headless "+Lazy! restore" +qa
 run nvim --headless "+Lazy! restore" +qa
 
 run nvim --headless \
