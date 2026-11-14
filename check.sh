@@ -226,7 +226,11 @@ fi
 # only works on one of them belongs in ~/.zshrc.local or ~/.gitconfig.local. Both
 # checks below were found setting up a second Mac: oh-my-zsh, starship and ng were
 # absent there, and commit.gpgsign pointed at a gpg binary that was not installed.
-ZSH_ERR="$(zsh -i -c exit 2>&1 >/dev/null)"
+#
+# Run under a pseudo-terminal via script(1): without a TTY zle cannot start, and
+# fzf's key-binding script then reports "can't change option: zle", an error a
+# real terminal never shows. The tr/sed strip the ^D the pty echoes on EOF.
+ZSH_ERR="$(script -q /dev/null zsh -i -c exit </dev/null 2>&1 | tr -d '\r\b' | sed 's/\^D//g' | grep -v '^[[:space:]]*$')"
 if [[ -z "$ZSH_ERR" ]]; then
   ok "interactive zsh starts without errors"
 else

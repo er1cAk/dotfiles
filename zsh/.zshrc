@@ -164,6 +164,49 @@ nv() {
   fi
 }
 
+# History, shared live across every tmux pane and window: a command run in one
+# pane is reachable with Up or Ctrl-R in all the others.
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=50000
+SAVEHIST=50000
+setopt share_history          # implies incremental append, with timestamps
+setopt hist_ignore_all_dups   # re-running a command moves it up instead of duplicating it
+setopt hist_ignore_space      # a leading space keeps a command (and any token in it) out of history
+setopt hist_reduce_blanks
+
+# fzf: Ctrl-R fuzzy history, Ctrl-T inserts a file path, Alt-C cds into a subdirectory.
+if command -v fzf >/dev/null; then
+  # fd respects .gitignore, so node_modules and build output stay out of the lists
+  if command -v fd >/dev/null; then
+    export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_ALT_C_COMMAND='fd --type d --hidden --exclude .git'
+  fi
+  # Catppuccin Mocha, query line on top
+  export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --border \
+--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
+--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
+--color=marker:#b4befe,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 \
+--color=selected-bg:#45475a"
+  source <(fzf --zsh)
+fi
+
+# zoxide: `z lois` jumps to the most-used directory matching "lois"; `zi` picks with fzf.
+command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
+
+# Suggestions from history (accept with Right arrow) and command highlighting.
+# Skipped where oh-my-zsh already loaded them as plugins. Highlighting wraps every
+# widget defined before it, so it must stay after fzf and autosuggestions.
+BREW_SHARE="${HOMEBREW_PREFIX:-/opt/homebrew}/share"
+if (( ! $+functions[_zsh_autosuggest_start] )) && [ -f "$BREW_SHARE/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
+  ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#6c7086"   # Catppuccin overlay0: visible, clearly not typed
+  source "$BREW_SHARE/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
+if (( ! ${+ZSH_HIGHLIGHT_VERSION} )) && [ -f "$BREW_SHARE/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
+  source "$BREW_SHARE/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+fi
+unset BREW_SHARE
+
 # Machine-specific PATHs, credentials and tool installs live in this untracked
 # file, sourced last so it can override anything above. Never move them here:
 # this repo is public.

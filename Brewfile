@@ -21,6 +21,10 @@ brew "lazygit"                # <leader>gg
 brew "stow"                   # this repo's own install method
 brew "git"
 brew "starship"               # prompt; .zshrc inits it when present
+brew "fzf"                    # Ctrl-R / Ctrl-T / Alt-C in zsh
+brew "zoxide"                 # `z` directory jumping
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
 brew "diff-so-fancy"          # .gitconfig pager and interactive.diffFilter
 brew "git-lfs"                # .gitconfig declares the lfs filter required
 
