@@ -18,6 +18,7 @@
 {⌘1} … {⌘9} | Go to window 1 to 9
 {⌘⇧[} {⌘⇧]} | Previous / next window (also {⌥←} {⌥→})
 {⌘P} | Pick a window from a tree
+{⌘O} | Open a project: its own session, created on first use
 {⌘⇧↩} | Zoom pane (toggle)
 ### Prefix {⌃a}, then
 {c} | New window in the current directory
@@ -26,7 +27,7 @@
 {H} {J} {K} {L} | Resize pane (hold to repeat)
 {z} {␣} | Zoom pane / cycle layouts
 {x} {X} | Close pane / window (asks first)
-{w} {s} | Window tree / session tree
+{w} {s} {f} | Window tree / session tree / project picker
 {d} {r} | Detach (keeps running) / reload config
 {↩} | Copy mode: {v} select, {⌃v} block, {y} copy, {Esc} quit
 {?} | List every binding
@@ -40,12 +41,14 @@
 {␣}<i>cmd</i> | Leading space: never saved to history (for tokens)
 <span class=ghost>grey text</span> | Suggestion from history: {→} or {⌃E} takes it, {⌥F} one word
 <span class=ok>green</span> <span class=bad>red</span> | Command exists / not found, before you press {↩}
+{ll} {lt} | eza long list with git status / tree; <code>cat</code> is bat
 {nv} | Neovim with the project's DB credentials (Infisical, else .env)
 
 ## fzf | peach | fuzzy finder, wired into zsh
 {⌃R} | Search all history
-{⌃T} | Insert a file path ({Tab} marks several; skips .gitignored files)
-{⌥C} | cd into a subdirectory
+{⌃T} | Insert a file path, with preview ({Tab} marks several)
+{⌃O} | In the {⌃T} picker: open the file in Quick Look
+{⌥C} | cd into a subdirectory, with a tree preview
 {**}{Tab} | Fuzzy-complete any argument: <code>vim **</code>, <code>cd **</code>, <code>ssh **</code>, <code>kill -9 **</code>
 ### Inside the picker
 {↑} {↓} | Move (also {⌃J} {⌃K}); {↩} picks, {Esc} cancels
