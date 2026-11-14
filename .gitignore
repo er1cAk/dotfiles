@@ -4,6 +4,10 @@
 # Machine-local git identity (holds a work email address)
 .gitconfig-work
 
+# Machine-local overrides; these hold credentials
+.zshrc.local
+.gitconfig.local
+
 # Neovim state that must never be committed:
 #   ~/.local/share/nvim is ~1.9 GB and fully regenerable from lazy-lock.json,
 #   Mason and tree-sitter. Listed here defensively in case anyone ever adds it.

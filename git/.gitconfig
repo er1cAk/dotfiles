@@ -1,7 +1,6 @@
 [user]
 	name = Erik Dvorčák
 	email = erik.dvorcak@gmail.com
-	signingKey = 910555CC079B0A4CDAD9BF54E42324D2686299B0
 [core]
 	autocrlf = input
 	pager = diff-so-fancy | less --tabs=4 -RFX
@@ -10,21 +9,8 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /private/var/folders/0c/yz17w_154nq4spsvy6qqf_d80000gn/T/AppTranslocation/4A4400AC-340B-4532-832B-EFE3755541AD/d/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
 [pull]
 	rebase = false
-[gpg]
-	program = /usr/local/MacGPG2/bin/gpg2
-[commit]
-	gpgsign = true
-[tag]
-	forceSignAnnotated = true
-	gpgSign = true
 [rebase]
 	autoSquash = true
 [interactive]
@@ -45,8 +31,17 @@
 	new = green bold
 	whitespace = red reverse
 
+# Machine-specific settings (credential helpers, hooksPath, GPG signing, which
+# only works where the key and gpg are installed) live in this untracked file.
+# Included before the work identity, so inside ~/work the work identity wins.
+[include]
+	path = ~/.gitconfig.local
+
 # Per-machine / per-context identity. Work repos under ~/work use a separate
 # identity file that is NOT tracked in this repo (it holds a work address).
 # git silently ignores this block if the file does not exist.
-[includeIf "gitdir:~/work/"]
+#
+# gitdir/i, not gitdir: macOS paths are case-insensitive but gitdir: matching
+# is not, so a ~/Work directory would silently fall back to the personal identity.
+[includeIf "gitdir/i:~/work/"]
 	path = ~/.gitconfig-work

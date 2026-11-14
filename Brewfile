@@ -21,6 +21,8 @@ brew "ripgrep"                # telescope live grep
 brew "lazygit"                # <leader>gg
 brew "stow"                   # this repo's own install method
 brew "git"
+brew "diff-so-fancy"          # .gitconfig pager and interactive.diffFilter
+brew "git-lfs"                # .gitconfig declares the lfs filter required
 
 # Not listed on purpose:
 #   node    -- provided by nvm here; js-debug-adapter and prettierd need it on PATH

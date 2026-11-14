@@ -63,7 +63,7 @@ for pkg in "${PACKAGES[@]}"; do
 done
 
 if (( CONFLICTS )); then
-  die "Move or delete the files listed above, then re-run. Do not use 'stow --adopt'."
+  die "Move or delete the files listed above, then re-run. Machine-specific shell and git settings belong in ~/.zshrc.local and ~/.gitconfig.local. Do not use 'stow --adopt'."
 fi
 
 for pkg in "${PACKAGES[@]}"; do

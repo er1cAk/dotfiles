@@ -4,11 +4,19 @@ Alacritty + tmux + NvChad on macOS. Catppuccin Mocha throughout.
 
 ## Restore on a new Mac
 
+If the Mac already has a `~/.zshrc` or `~/.gitconfig`, move whatever is specific to that
+machine (PATHs to its installs, credentials, credential helpers, `core.hooksPath`) into
+`~/.zshrc.local` and `~/.gitconfig.local` and delete the originals first: `install.sh`
+aborts on the conflict rather than overwrite them, and the tracked files pull both local
+files in, so nothing machine-specific has to live in this public repo. Installers that
+append to `~/.zshrc` or run `git config --global` now write into this repo through the
+symlink; move what they add into the local file before committing.
+
 ```sh
 git clone https://github.com/er1cAk/dotfiles ~/dotfiles
 cd ~/dotfiles
 ./install.sh          # ~10 minutes, mostly plugin/LSP/parser downloads
-./check.sh            # 33 assertions; everything should pass
+./check.sh            # 39 assertions; everything should pass
 ```
 
 Then two manual steps `install.sh` prints and cannot do for you:
@@ -73,6 +81,7 @@ conflicts and aborts instead.
 | `~/.config/github-copilot/` | machine-local credentials |
 | project.nvim history | machine-specific, and it lists private repo names |
 | `~/.gitconfig-work` | holds a work email address |
+| `~/.zshrc.local`, `~/.gitconfig.local` | machine-specific PATHs, credentials, credential helpers and GPG signing; pulled in by the tracked files (see *Git identity* for include order) |
 
 ## Reproducibility
 
@@ -120,7 +129,14 @@ untracked file:
     email = you@work.example
 ```
 
-Applied via `includeIf "gitdir:~/work/"`. Git ignores the block if the file is absent.
+Applied via `includeIf "gitdir/i:~/work/"`. Git ignores the block if the file is absent.
+The `/i` matters: macOS paths are case-insensitive but plain `gitdir:` matching is not,
+so a `~/Work` directory would silently commit with the personal identity.
+
+GPG signing is not in the tracked `.gitconfig`: it only works on a machine that has both
+`gpg` and the key, and set globally on any other machine it fails every commit. Enable
+it per machine in `~/.gitconfig.local`, which is included before the work identity so
+that inside `~/work` the work identity still wins.
 
 Global ignores live at `~/.config/git/ignore` (the XDG path git reads automatically).
 `core.excludesfile` is deliberately unset — it previously pointed at an absolute

@@ -188,7 +188,7 @@ fi
 
 # --------------------------------------------------------------- dotfiles ---
 head_ "Dotfiles"
-for p in "$HOME/.config/nvim" "$HOME/.tmux.conf" "$HOME/.config/alacritty"; do
+for p in "$HOME/.config/nvim" "$HOME/.tmux.conf" "$HOME/.config/alacritty" "$HOME/.zshrc" "$HOME/.gitconfig"; do
   if [[ -L "$p" ]]; then
     ok "$(basename "$p") is a symlink into the repo"
   else
@@ -200,6 +200,24 @@ if ! grep -rqE '/Users/[a-z]+' "$HOME/dotfiles/zsh/.zshrc" "$HOME/dotfiles/git/.
   ok "no hardcoded home paths in tracked shell/git config"
 else
   bad "hardcoded /Users/... paths remain -- will break under a different username"
+fi
+
+# The tracked .zshrc and .gitconfig are shared by every machine, so anything that
+# only works on one of them belongs in ~/.zshrc.local or ~/.gitconfig.local. Both
+# checks below were found setting up a second Mac: oh-my-zsh, starship and ng were
+# absent there, and commit.gpgsign pointed at a gpg binary that was not installed.
+ZSH_ERR="$(zsh -i -c exit 2>&1 >/dev/null)"
+if [[ -z "$ZSH_ERR" ]]; then
+  ok "interactive zsh starts without errors"
+else
+  bad "zsh startup printed errors:"; sed 's/^/       /' <<<"$ZSH_ERR" | head -6
+fi
+
+GPG_BIN="$(git config --get gpg.program || echo gpg)"
+if [[ "$(git config --get commit.gpgsign)" != "true" ]] || command -v "$GPG_BIN" >/dev/null; then
+  ok "commit signing is off, or its gpg binary exists"
+else
+  bad "commit.gpgsign is on but $GPG_BIN is missing: every commit will fail"
 fi
 
 # ------------------------------------------------------------------ done ---

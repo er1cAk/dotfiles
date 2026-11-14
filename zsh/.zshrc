@@ -76,8 +76,11 @@ plugins=(
   zsh-syntax-highlighting
 )
 
-source $ZSH/oh-my-zsh.sh
-source $ZSH/plugins/git/git.plugin.zsh
+# Guarded so a machine without oh-my-zsh gets a working shell, not an error per prompt.
+if [ -d "$ZSH" ]; then
+  source $ZSH/oh-my-zsh.sh
+  source $ZSH/plugins/git/git.plugin.zsh
+fi
 
 # User configuration
 
@@ -109,9 +112,6 @@ source $ZSH/plugins/git/git.plugin.zsh
  notarizeHistory(){xcrun altool --notarization-history 0 -u "$1" -p} 
  alias flush.cache="dscacheutil -flushcache"
 
-
- export PATH="/usr/local/opt/ruby/bin:$PATH"
-
 # Android SDK ROOT
 export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
 export ANDROID_HOME=$ANDROID_SDK_ROOT
@@ -125,44 +125,18 @@ export PATH=$PATH:$ANDROID_HOME
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-export PATH="/usr/local/opt/gettext/bin:$PATH"
-
-# export PATH="/usr/local/opt/ruby/bin:$PATH"
-export PATH="/usr/local/sbin:$PATH"
-export PATH=$PATH:$ANDROID_SDK_ROOT/build-tools/28.0.3/
-export PATH="/usr/local/opt/python@3.8/bin:$PATH"
-export PATH="/usr/local/opt/krb5/bin:$PATH"
-export PATH="/usr/local/opt/krb5/sbin:$PATH"
-export PATH="/usr/local/opt/flex/bin:$PATH"
-export PATH="/usr/local/opt/bison/bin:$PATH"
-export PATH="/user/local/cuda/bin:$PATH"
-#export PATH="/usr/local/opt/openjdk/bin:$PATH"
-export PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
-export PATH="/usr/local/opt/icu4c/bin:$PATH"
-export PATH="/usr/local/opt/icu4c/sbin:$PATH"
-export LDFLAGS="-L/opt/homebrew/opt/jpeg/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/jpeg/include"
-export PKG_CONFIG_PATH="/opt/homebrew/opt/jpeg/lib/pkgconfig"
-export NVM_DIR=~/.nvm
-source $(brew --prefix nvm)/nvm.sh
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 [ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env" # ghcup-env
 export NVM_DIR="$HOME/.nvm"
   [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" 
+  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
 
-export PATH="/opt/homebrew/opt/jpeg/bin:$PATH"
-export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"
-export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-
-eval "$(starship init zsh)"
-export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"
-
+command -v starship >/dev/null && eval "$(starship init zsh)"
 
 # Load Angular CLI autocompletion.
-source <(ng completion script)
+command -v ng >/dev/null && source <(ng completion script)
 
 export GPG_TTY=$(tty)
 
@@ -173,17 +147,6 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
-
-# Added by Windsurf
-export PATH="$HOME/.codeium/windsurf/bin:$PATH"
-
-
-# Added by Antigravity
-export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
- 
-alias claude-work="CLAUDE_CONFIG_DIR=~/.claude-work /opt/homebrew/bin/claude"
-export PATH="/opt/homebrew/opt/icu4c@78/sbin:$PATH"
-export PATH="/opt/homebrew/opt/icu4c@78/bin:$PATH"
 
 # nv -- open nvim with the project's DB credentials injected as env vars.
 #
@@ -200,3 +163,8 @@ nv() {
     nvim "$@"
   fi
 }
+
+# Machine-specific PATHs, credentials and tool installs live in this untracked
+# file, sourced last so it can override anything above. Never move them here:
+# this repo is public.
+[ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
