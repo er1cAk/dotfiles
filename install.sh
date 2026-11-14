@@ -51,12 +51,17 @@ say "Linking dotfiles with stow"
 # NEVER use --adopt: it resolves conflicts by overwriting THIS REPO with whatever
 # is already on the machine, silently discarding the good version. Detect
 # conflicts and stop instead.
+#
+# Resolve the path rather than test it with -L: stow folds ~/.config/nvim into a
+# single directory symlink, so the files under it are not symlinks themselves,
+# and a -L test reports every one of them as a conflict on a re-run.
 CONFLICTS=0
+DOTFILES_REAL="$(realpath "$DOTFILES")"
 for pkg in "${PACKAGES[@]}"; do
   while IFS= read -r target; do
     dest="$HOME/${target#"$pkg/"}"
-    if [[ -e "$dest" && ! -L "$dest" ]]; then
-      warn "conflict: $dest already exists and is not a symlink"
+    if [[ -e "$dest" && "$(realpath "$dest")" != "$DOTFILES_REAL"/* ]]; then
+      warn "conflict: $dest already exists and is not linked into this repo"
       CONFLICTS=1
     fi
   done < <(cd "$DOTFILES" && find "$pkg" -type f | sed "s|^|$pkg/|;s|^$pkg/$pkg/|$pkg/|")
