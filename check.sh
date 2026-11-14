@@ -253,6 +253,27 @@ else
   bad "zsh startup printed errors:"; sed 's/^/       /' <<<"$ZSH_ERR" | head -6
 fi
 
+# The fzf preview must answer for every kind of path, and never hang: Quick Look's
+# thumbnailer once blocked forever on a Mach-O binary, freezing the preview pane.
+python3 - "$SCRATCH/t.png" <<'PY'
+import struct, sys, zlib
+def chunk(t, d): return struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d))
+rows = b"".join(b"\x00" + b"\x89\xb4\xfa" * 4 for _ in range(4))
+png = b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", 4, 4, 8, 2, 0, 0, 0)) \
+    + chunk(b"IDAT", zlib.compress(rows)) + chunk(b"IEND", b"")
+open(sys.argv[1], "wb").write(png)
+PY
+PREVIEW_BAD=()
+for f in "$HOME/dotfiles" "$HOME/dotfiles/install.sh" "$SCRATCH/t.png" /bin/ls; do
+  out="$(FZF_PREVIEW_COLUMNS=40 FZF_PREVIEW_LINES=10 perl -e 'alarm 10; exec @ARGV' \
+    "$HOME/.config/zsh/fzf-preview.sh" "$f" 2>/dev/null)" && [[ -n "$out" ]] || PREVIEW_BAD+=("$f")
+done
+if (( ${#PREVIEW_BAD[@]} == 0 )); then
+  ok "fzf preview renders a directory, text, an image and a binary"
+else
+  bad "fzf preview failed, hung or printed nothing for: ${PREVIEW_BAD[*]}"
+fi
+
 if [[ "$(defaults read -g InitialKeyRepeat 2>/dev/null)" == 15 && "$(defaults read -g KeyRepeat 2>/dev/null)" == 2 ]]; then
   ok "key repeat at install.sh's values (225ms delay, then every 30ms)"
 else

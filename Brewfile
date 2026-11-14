@@ -25,6 +25,9 @@ brew "fzf"                    # Ctrl-R / Ctrl-T / Alt-C in zsh
 brew "zoxide"                 # `z` directory jumping
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
+brew "eza"                    # ls, and tree previews in fzf and the project picker
+brew "bat"                    # cat, and text previews in fzf
+brew "chafa"                  # image and Quick Look thumbnail previews as block art
 brew "diff-so-fancy"          # .gitconfig pager and interactive.diffFilter
 brew "git-lfs"                # .gitconfig declares the lfs filter required
 

@@ -68,6 +68,8 @@ nvim/.config/nvim/              editor config + lazy-lock.json
 alacritty/.config/alacritty/    alacritty.toml + tmux-session.sh
 tmux/.tmux.conf
 zsh/.zshrc
+  .config/zsh/fzfrc             fzf layout + colours, shared with tmux popups
+  .config/zsh/fzf-preview.sh    fzf previews: tree, text, images, Quick Look thumbnails
 starship/.config/starship.toml  two-line prompt, Catppuccin palette
 git/.gitconfig + .config/git/ignore
 ```

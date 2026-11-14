@@ -218,17 +218,31 @@ if command -v fzf >/dev/null; then
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
     export FZF_ALT_C_COMMAND='fd --type d --hidden --exclude .git'
   fi
-  # Catppuccin Mocha, query line on top
-  export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --border \
---color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
---color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
---color=marker:#b4befe,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8 \
---color=selected-bg:#45475a"
+  # Layout and Catppuccin colours live in a file so the tmux project picker, whose
+  # popup never reads this .zshrc, uses the same ones.
+  export FZF_DEFAULT_OPTS_FILE="$HOME/.config/zsh/fzfrc"
+  # Previews: a tree for directories, highlighted text, block-art images and Quick
+  # Look thumbnails. Ctrl-O opens the selection in Quick Look at full quality.
+  export FZF_CTRL_T_OPTS="--preview '$HOME/.config/zsh/fzf-preview.sh {}' --bind 'ctrl-o:execute-silent(qlmanage -p {} >/dev/null 2>&1 &)'"
+  export FZF_ALT_C_OPTS="--preview '$HOME/.config/zsh/fzf-preview.sh {}'"
   source <(fzf --zsh)
 fi
 
 # zoxide: `z lois` jumps to the most-used directory matching "lois"; `zi` picks with fzf.
 command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
+
+# eza and bat: ls with icons and per-file git status, cat with highlighting.
+# Aliases only, so scripts keep the real commands; bat prints plain text when piped.
+if command -v eza >/dev/null; then
+  alias ls='eza --icons=auto --group-directories-first'
+  alias ll='eza -l --git --icons=auto --group-directories-first --time-style=relative'
+  alias la='ll -a'
+  alias lt='eza --tree --level=2 --icons=auto --git-ignore'
+fi
+if command -v bat >/dev/null; then
+  export BAT_THEME="Catppuccin Mocha"
+  alias cat='bat --paging=never --style=plain'
+fi
 
 # Suggestions from history (accept with Right arrow) and command highlighting.
 # Skipped where oh-my-zsh already loaded them as plugins. Highlighting wraps every
