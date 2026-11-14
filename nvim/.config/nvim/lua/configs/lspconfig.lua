@@ -1,6 +1,16 @@
 -- Neovim 0.11 native LSP config on top of NvChad's defaults.
 require("nvchad.configs.lspconfig").defaults()
 
+-- NvChad's on_attach maps <leader>D to type definition, which shadows the global
+-- <leader>D database UI in every buffer with a language server. Type definition
+-- stays reachable on grt (built-in) and gy. Registered after defaults(), so this
+-- LspAttach handler runs after NvChad's.
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    pcall(vim.keymap.del, "n", "<leader>D", { buffer = args.buf })
+  end,
+})
+
 -- Make sure mason-installed binaries are on PATH before we probe for them.
 local mason_bin = vim.fn.stdpath "data" .. "/mason/bin"
 if not string.find(vim.env.PATH or "", mason_bin, 1, true) then

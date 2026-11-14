@@ -170,6 +170,22 @@ while IFS= read -r line || [[ -n "$line" ]]; do
   esac
 done < <(nvim --headless -c "luafile $SCRATCH/keymaps.lua" 2>&1)
 
+# <leader>D must stay the database UI once a language server attaches: NvChad's
+# on_attach rebinds it to type definition per buffer, and lspconfig.lua deletes
+# that again. The keymap checks above run with no file open, so they cannot see it.
+printf 'local x = 1\nreturn x\n' > "$SCRATCH/t.lua"
+LEADER_D="$(cd "$SCRATCH" && nvim --headless t.lua \
+  -c 'lua vim.wait(8000, function() return #vim.lsp.get_clients({bufnr=0}) > 0 end, 100); vim.wait(300)' \
+  -c 'lua io.write(#vim.lsp.get_clients({bufnr=0}) .. " " .. (vim.fn.maparg("<leader>D", "n", false, true).desc or "none"))' \
+  -c 'qa!' 2>&1)"
+if [[ "$LEADER_D" =~ ^[1-9][0-9]*\ database\ UI\ toggle$ ]]; then
+  ok "<leader>D opens the database UI in an LSP buffer"
+elif [[ "$LEADER_D" == 0\ * ]]; then
+  bad "no language server attached to a .lua file, so <leader>D could not be checked"
+else
+  bad "<leader>D in an LSP buffer is '${LEADER_D#* }', not the database UI"
+fi
+
 # ------------------------------------------------------------ formatting ---
 head_ "Formatting"
 
