@@ -82,6 +82,20 @@ if [ -d "$ZSH" ]; then
   source $ZSH/plugins/git/git.plugin.zsh
 fi
 
+# Completion. oh-my-zsh runs compinit itself; otherwise run it here with its
+# security audit (the slow part) at most once a day, reusing the dump in between.
+# Must come before anything that calls compdef (zoxide, ng).
+if (( ! $+functions[compdef] )); then
+  autoload -Uz compinit
+  _zcompdump_stale=( "${ZDOTDIR:-$HOME}"/.zcompdump(N.mh+24) )
+  if (( $#_zcompdump_stale )) || [[ ! -s "${ZDOTDIR:-$HOME}/.zcompdump" ]]; then
+    compinit
+  else
+    compinit -C
+  fi
+  unset _zcompdump_stale
+fi
+
 # User configuration
 
 # You may need to manually set your language environment
@@ -129,9 +143,31 @@ export SDKMAN_DIR="$HOME/.sdkman"
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 [ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env" # ghcup-env
+
+# nvm without its startup cost. --no-use skips resolving the default version
+# (~650ms per shell, felt on every new tmux pane); its bin goes on PATH directly
+# instead. Aliases are followed through nvm's alias files (default -> 22, or
+# lts/* -> lts/jod -> v22.x) and the highest installed match wins; anything that
+# does not resolve that way (node, stable) falls back to a real `nvm use`.
+# nvm's bash_completion is deliberately not sourced: it runs an uncached compinit.
 export NVM_DIR="$HOME/.nvm"
-  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+if [ -s "/opt/homebrew/opt/nvm/nvm.sh" ]; then
+  \. "/opt/homebrew/opt/nvm/nvm.sh" --no-use
+  _nvm_v=""
+  [[ -f "$NVM_DIR/alias/default" ]] && _nvm_v="$(<"$NVM_DIR/alias/default")"
+  for _i in 1 2 3 4; do
+    [[ -n "$_nvm_v" && -f "$NVM_DIR/alias/$_nvm_v" ]] && _nvm_v="$(<"$NVM_DIR/alias/$_nvm_v")"
+  done
+  _nvm_dir=( "$NVM_DIR"/versions/node/v${_nvm_v#v}(|.*)(N/nOn) )
+  if [[ -n "$_nvm_v" && -n "$_nvm_dir" ]]; then
+    export NVM_BIN="${_nvm_dir[1]}/bin" NVM_INC="${_nvm_dir[1]}/include/node"
+    # tmux panes inherit a PATH that already holds a node bin; drop it, as `nvm use` would
+    path=( "$NVM_BIN" ${path:#$NVM_DIR/versions/node/*/bin} )
+  else
+    nvm use default --silent >/dev/null 2>&1
+  fi
+  unset _nvm_v _nvm_dir _i
+fi
 
 command -v starship >/dev/null && eval "$(starship init zsh)"
 
