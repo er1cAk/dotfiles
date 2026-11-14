@@ -6,8 +6,7 @@
 #
 # Run `brew bundle dump --force` separately if you ever want a full snapshot.
 
-# terminal
-cask "alacritty"
+# terminal (Alacritty itself is installed by install.sh, see "Not listed on purpose")
 cask "font-jetbrains-mono-nerd-font"
 brew "tmux"
 
@@ -27,3 +26,5 @@ brew "git-lfs"                # .gitconfig declares the lfs filter required
 # Not listed on purpose:
 #   node    -- provided by nvm here; js-debug-adapter and prettierd need it on PATH
 #   go      -- installed from go.dev at /usr/local/go, not Homebrew
+#   alacritty: the cask was disabled 2026-09-01 (fails Gatekeeper), so
+#           install.sh installs the pinned release DMG instead

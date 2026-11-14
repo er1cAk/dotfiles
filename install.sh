@@ -77,7 +77,32 @@ for pkg in "${PACKAGES[@]}"; do
 done
 
 # ------------------------------------------------------------- alacritty ---
-say "Alacritty terminfo and CLI"
+say "Alacritty app, terminfo and CLI"
+
+# Homebrew disabled the alacritty cask on 2026-09-01: the app is unsigned and
+# fails Gatekeeper. So install the official release DMG (the same artifact the
+# cask shipped), pinned by version and sha256, and clear quarantine explicitly.
+# Bump both values together when upgrading.
+ALACRITTY_VERSION="v0.17.0"
+ALACRITTY_SHA256="ad8d7de35fb38e43184776cac6dfee05ca325caa0b6639a06a55e54e4b026620"
+if [[ ! -d /Applications/Alacritty.app ]]; then
+  if (( DRY_RUN )); then
+    echo "  would install Alacritty $ALACRITTY_VERSION from the release DMG"
+  else
+    DMG_DIR="$(mktemp -d)"
+    DMG="$DMG_DIR/Alacritty-$ALACRITTY_VERSION.dmg"
+    curl -fsSL -o "$DMG" \
+      "https://github.com/alacritty/alacritty/releases/download/$ALACRITTY_VERSION/Alacritty-$ALACRITTY_VERSION.dmg"
+    echo "$ALACRITTY_SHA256  $DMG" | shasum -a 256 -c - >/dev/null \
+      || die "Alacritty DMG checksum mismatch"
+    hdiutil attach -nobrowse -readonly -mountpoint "$DMG_DIR/mnt" "$DMG" >/dev/null
+    cp -R "$DMG_DIR/mnt/Alacritty.app" /Applications/
+    hdiutil detach "$DMG_DIR/mnt" >/dev/null
+    xattr -dr com.apple.quarantine /Applications/Alacritty.app
+    rm -rf "$DMG_DIR"
+    echo "  installed Alacritty $ALACRITTY_VERSION"
+  fi
+fi
 
 # `alacritty` terminfo is not in the system database; without it TERM=alacritty
 # is unresolvable. The app bundle ships it.
