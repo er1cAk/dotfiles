@@ -231,10 +231,11 @@ fi
 # zoxide: `z lois` jumps to the most-used directory matching "lois"; `zi` picks with fzf.
 command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
 
-# eza and bat: ls with icons and per-file git status, cat with highlighting.
+# eza and bat: listings with icons and per-file git status, cat with highlighting.
 # Aliases only, so scripts keep the real commands; bat prints plain text when piped.
+# ls itself stays BSD ls: eza reads -t as --time <field>, so `ls -lt`/`ls -ltr`
+# from muscle memory would fail. eza gets the new names instead.
 if command -v eza >/dev/null; then
-  alias ls='eza --icons=auto --group-directories-first'
   alias ll='eza -l --git --icons=auto --group-directories-first --time-style=relative'
   alias la='ll -a'
   alias lt='eza --tree --level=2 --icons=auto --git-ignore'
