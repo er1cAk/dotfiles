@@ -56,6 +56,16 @@ else
   bad "kill-window has NO confirmation"
 fi
 
+# Cmd-O only works while three files agree: Alacritty sends prefix f, tmux binds
+# f to a popup, and the popup runs project.sh.
+if grep -qE 'key = "O", +mods = "Command", +chars = "\\u0001f"' "$HOME/.config/alacritty/alacritty.toml" \
+   && grep -qE 'prefix +f +display-popup .*project\.sh' <<<"$KEYS" \
+   && [[ -x "$HOME/.config/tmux/project.sh" ]] && sh -n "$HOME/.config/tmux/project.sh"; then
+  ok "Cmd-O -> prefix f -> project picker is wired"
+else
+  bad "the Cmd-O project picker is broken: check the alacritty.toml binding, tmux's prefix f and project.sh"
+fi
+
 # ---------------------------------------------------------------- neovim ---
 head_ "Neovim"
 

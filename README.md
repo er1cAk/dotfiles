@@ -67,6 +67,7 @@ nvim/.config/nvim/              editor config + lazy-lock.json
   lua/plugins/*.lua             plugin specs
 alacritty/.config/alacritty/    alacritty.toml + tmux-session.sh
 tmux/.tmux.conf
+  .config/tmux/project.sh       Cmd-O / prefix f: one tmux session per repo
 zsh/.zshrc
   .config/zsh/fzfrc             fzf layout + colours, shared with tmux popups
   .config/zsh/fzf-preview.sh    fzf previews: tree, text, images, Quick Look thumbnails

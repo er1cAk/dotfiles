@@ -221,6 +221,8 @@ bindings = [
 
   # Cmd-P: visual picker for every tmux window (like Cmd-P "go to tab").
   { key = "P",        mods = "Command",       chars = "\u0001w" },
+  # Cmd-O: open a project, i.e. switch to (or create) the repo's own tmux session.
+  { key = "O",        mods = "Command",       chars = "\u0001f" },
   # Cmd-Shift-W: close the whole tmux window, not just this pane (confirms first).
   { key = "W",        mods = "Command|Shift", chars = "\u0001X" },
   # Cmd-Shift-Enter: zoom the current pane to fill the window (toggle).
