@@ -1,0 +1,81 @@
+# Starship prompt: Catppuccin Mocha, matched to Alacritty, tmux and NvChad.
+#
+# Two lines on purpose: context on the first, input on the second, so every
+# command starts in the same column however deep the directory is. Modules are
+# listed explicitly in `format` because starship's default enables dozens of
+# them (cloud profiles, package versions...), and that noise is what makes a
+# prompt slow to scan. Language versions only appear in projects that use them.
+
+format = """
+$username$hostname$directory$git_branch$git_state$git_status$nodejs$python$golang$cmd_duration
+$character"""
+
+palette = "catppuccin_mocha"
+
+# Only rendered over SSH or as root, the one time "which machine" is a question.
+[username]
+format = "[$user]($style)@"
+style_user = "bold yellow"
+style_root = "bold red"
+
+[hostname]
+format = "[$hostname]($style) in "
+style = "bold yellow"
+
+[directory]
+style = "bold blue"
+truncation_length = 4
+truncate_to_repo = true            # inside a repo the path starts at the repo root
+read_only = " \U000F033E"
+read_only_style = "red"
+
+[git_branch]
+format = "on [$symbol$branch(:$remote_branch)]($style) "
+symbol = " "
+style = "bold mauve"
+
+# REBASING 2/5, MERGING, CHERRY-PICKING... while an operation is unfinished
+[git_state]
+style = "bold red"
+
+[git_status]
+format = "([$all_status$ahead_behind]($style) )"
+style = "peach"
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇡${ahead_count}⇣${behind_count}"
+
+[nodejs]
+format = "via [$symbol$version]($style) "
+symbol = " "
+style = "green"
+
+[python]
+format = 'via [$symbol$version( \($virtualenv\))]($style) '
+symbol = " "
+style = "yellow"
+
+[golang]
+format = "via [$symbol$version]($style) "
+symbol = " "
+style = "sapphire"
+
+[cmd_duration]
+min_time = 2000
+format = "took [$duration]($style) "
+style = "yellow"
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold lavender)"
+
+[palettes.catppuccin_mocha]
+red = "#f38ba8"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe"
+mauve = "#cba6f7"

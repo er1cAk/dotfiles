@@ -16,7 +16,7 @@ symlink; move what they add into the local file before committing.
 git clone https://github.com/er1cAk/dotfiles ~/dotfiles
 cd ~/dotfiles
 ./install.sh          # ~10 minutes, mostly plugin/LSP/parser downloads
-./check.sh            # 40 assertions; everything should pass
+./check.sh            # 42 assertions; everything should pass
 ```
 
 Then two manual steps `install.sh` prints and cannot do for you:
@@ -61,6 +61,7 @@ nvim/.config/nvim/              editor config + lazy-lock.json
 alacritty/.config/alacritty/    alacritty.toml + tmux-session.sh
 tmux/.tmux.conf
 zsh/.zshrc
+starship/.config/starship.toml  two-line prompt, Catppuccin palette
 git/.gitconfig + .config/git/ignore
 ```
 

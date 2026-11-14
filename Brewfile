@@ -20,6 +20,7 @@ brew "ripgrep"                # telescope live grep
 brew "lazygit"                # <leader>gg
 brew "stow"                   # this repo's own install method
 brew "git"
+brew "starship"               # prompt; .zshrc inits it when present
 brew "diff-so-fancy"          # .gitconfig pager and interactive.diffFilter
 brew "git-lfs"                # .gitconfig declares the lfs filter required
 

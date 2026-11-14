@@ -8,7 +8,7 @@
 set -euo pipefail
 
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PACKAGES=(nvim alacritty tmux zsh git)
+PACKAGES=(nvim alacritty tmux zsh git starship)
 DRY_RUN=0
 [[ "${1:-}" == "--dry-run" ]] && DRY_RUN=1
 

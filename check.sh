@@ -208,7 +208,7 @@ fi
 
 # --------------------------------------------------------------- dotfiles ---
 head_ "Dotfiles"
-for p in "$HOME/.config/nvim" "$HOME/.tmux.conf" "$HOME/.config/alacritty" "$HOME/.zshrc" "$HOME/.gitconfig"; do
+for p in "$HOME/.config/nvim" "$HOME/.tmux.conf" "$HOME/.config/alacritty" "$HOME/.zshrc" "$HOME/.gitconfig" "$HOME/.config/starship.toml"; do
   if [[ -L "$p" ]]; then
     ok "$(basename "$p") is a symlink into the repo"
   else
@@ -231,6 +231,14 @@ if [[ -z "$ZSH_ERR" ]]; then
   ok "interactive zsh starts without errors"
 else
   bad "zsh startup printed errors:"; sed 's/^/       /' <<<"$ZSH_ERR" | head -6
+fi
+
+# starship reports a bad key or palette colour only when it renders, so a typo
+# would otherwise surface as a warning on every prompt rather than here.
+if [[ -z "$(STARSHIP_LOG=warn starship prompt 2>&1 >/dev/null)" ]]; then
+  ok "starship.toml loads without warnings"
+else
+  bad "starship is missing or starship.toml has errors (run: starship prompt)"
 fi
 
 GPG_BIN="$(git config --get gpg.program || echo gpg)"
