@@ -12,7 +12,9 @@ TERM = "alacritty"
 
 # --- window ----------------------------------------------------------------
 [window]
-opacity = 0.95
+# Lowered from 0.95: at that value the window was effectively solid and the blur
+# below never showed. 0.85 lets the desktop through enough for the blur to read.
+opacity = 0.85
 blur = true
 padding = { x = 12, y = 12 }
 dynamic_padding = true
@@ -179,6 +181,21 @@ bindings = [
   # installs; it is written here by hand because that command appends a
   # [[keyboard.bindings]] table, which TOML forbids alongside this inline array.
   { key = "Return",   mods = "Shift",         chars = "\u001B\r" },
+
+  # line editing, macOS-style. Option-Backspace already works out of the box:
+  # option_as_alt sends ESC DEL, which zsh binds to backward-kill-word. These two
+  # fill in the gaps by sending the control chars readline/zle/nvim already know.
+  { key = "Backspace", mods = "Command", chars = "\u0015" },   # Cmd-Backspace -> ^U, kill the whole line
+  { key = "Delete",    mods = "Alt",     chars = "\u001Bd" },  # Opt-FwdDelete -> ESC-d, kill word forward
+
+  # cursor motion, macOS-style. Each of these sends the sequence zsh's emacs
+  # keymap already binds -- the chords' own sequences (^[OH, ^[^[[D, ...) are all
+  # undefined-key in zle, which is why they do nothing without these lines.
+  # Note Ctrl-A cannot be used for line-start: tmux eats it as the prefix.
+  { key = "Left",      mods = "Alt",     chars = "\u001Bb" },    # Opt-Left   -> backward-word
+  { key = "Right",     mods = "Alt",     chars = "\u001Bf" },    # Opt-Right  -> forward-word
+  { key = "Left",      mods = "Command", chars = "\u001B[1~" },  # Cmd-Left   -> Home, beginning-of-line
+  { key = "Right",     mods = "Command", chars = "\u001B[4~" },  # Cmd-Right  -> End,  end-of-line
 
   # windows / view
   { key = "N",        mods = "Command",       action = "CreateNewWindow" },
